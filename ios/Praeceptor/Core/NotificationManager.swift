@@ -89,7 +89,7 @@ final class NotificationManager: ObservableObject {
         center.removePendingNotificationRequests(withIdentifiers: [reminder.rawValue])
 
         let content = UNMutableNotificationContent()
-        content.title = "The Praeceptor"
+        content.title = UserDefaults.standard.string(forKey: "mentor_name") ?? "The Praeceptor"
         content.body = reminder.messages.randomElement() ?? reminder.messages[0]
         content.sound = .default
 

@@ -3,7 +3,7 @@ import Foundation
 struct ClaudeService: Sendable {
     private let apiKey: String
     private let model = "claude-sonnet-4-6"
-    private let maxTokens = 2048
+    private let maxTokens = 8000
     let session: URLSession
 
     init(apiKey: String, session: URLSession? = nil) {
@@ -24,13 +24,15 @@ struct ClaudeService: Sendable {
                     request.setValue(apiKey, forHTTPHeaderField: "x-api-key")
                     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                     request.setValue("2023-06-01", forHTTPHeaderField: "anthropic-version")
+                    request.setValue("interleaved-thinking-2025-05-14", forHTTPHeaderField: "anthropic-beta")
 
                     let body: [String: Any] = [
                         "model": model,
                         "max_tokens": maxTokens,
                         "stream": true,
                         "system": systemPrompt,
-                        "messages": messages
+                        "messages": messages,
+                        "thinking": ["type": "enabled", "budget_tokens": 5000]
                     ]
                     request.httpBody = try JSONSerialization.data(withJSONObject: body)
 

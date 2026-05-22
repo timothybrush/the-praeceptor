@@ -13,6 +13,7 @@ struct WhisperService {
         guard let audioData = try? Data(contentsOf: audioURL), !audioData.isEmpty else {
             throw TranscriptionError.emptyAudio
         }
+        defer { try? FileManager.default.removeItem(at: audioURL) }
 
         var request = URLRequest(url: URL(string: "https://api.openai.com/v1/audio/transcriptions")!)
         request.httpMethod = "POST"

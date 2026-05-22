@@ -62,7 +62,12 @@ final class SessionStore: ObservableObject {
         clearSession()
     }
 
+    private let contextPruningLimit = 40
+
     var conversationHistory: [[String: String]] {
-        messages.map { ["role": $0.role.rawValue, "content": $0.content] }
+        let source = messages.count > contextPruningLimit
+            ? Array(messages.suffix(contextPruningLimit))
+            : messages
+        return source.map { ["role": $0.role.rawValue, "content": $0.content] }
     }
 }

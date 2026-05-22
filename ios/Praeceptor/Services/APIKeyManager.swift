@@ -7,8 +7,39 @@ final class APIKeyManager: ObservableObject {
 
     @Published var hasRequiredKeys: Bool = false
 
+    var transcriptionProvider: TranscriptionProvider {
+        get {
+            TranscriptionProvider(rawValue: UserDefaults.standard.string(forKey: "transcriptionProvider") ?? "") ?? .apple
+        }
+        set {
+            UserDefaults.standard.set(newValue.rawValue, forKey: "transcriptionProvider")
+            objectWillChange.send()
+        }
+    }
+
+    var ttsProvider: TTSProvider {
+        get {
+            TTSProvider(rawValue: UserDefaults.standard.string(forKey: "ttsProvider") ?? "") ?? .apple
+        }
+        set {
+            UserDefaults.standard.set(newValue.rawValue, forKey: "ttsProvider")
+            objectWillChange.send()
+        }
+    }
+
+    var speakingSpeed: Double {
+        get {
+            let v = UserDefaults.standard.double(forKey: "speakingSpeed")
+            return v == 0.0 ? 0.92 : v
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "speakingSpeed")
+            objectWillChange.send()
+        }
+    }
+
     init() {
-        hasRequiredKeys = claudeKey != nil && openAIKey != nil
+        hasRequiredKeys = claudeKey != nil
     }
 
     var claudeKey: String? {
@@ -16,7 +47,7 @@ final class APIKeyManager: ObservableObject {
         set {
             if let value = newValue { save(key: "claude_api_key", value: value) }
             else { delete(key: "claude_api_key") }
-            hasRequiredKeys = claudeKey != nil && openAIKey != nil
+            hasRequiredKeys = claudeKey != nil
         }
     }
 
@@ -25,7 +56,6 @@ final class APIKeyManager: ObservableObject {
         set {
             if let value = newValue { save(key: "openai_api_key", value: value) }
             else { delete(key: "openai_api_key") }
-            hasRequiredKeys = claudeKey != nil && openAIKey != nil
         }
     }
 

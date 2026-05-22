@@ -24,7 +24,7 @@ The Praeceptor is a Claude Project folder paired with a native iOS voice applica
 
 **The KNOWING Layer** is what he learns about the specific person he's working with. It informs his judgment — it does not change who he is. Hard limit: 800 tokens. The mentor is never smaller than his context window.
 
-**The iOS App** is the delivery mechanism. Swift 6, SwiftUI, iOS 18+. Voice in via OpenAI Whisper API. Voice out via OpenAI TTS (voice: onyx, speed: 0.92 — onyx at 0.92 sounds like someone who has earned the right to speak slowly). Claude Sonnet 4.6 streaming in the middle.
+**The iOS App** is the delivery mechanism. Swift 6, SwiftUI, iOS 18+. Voice pipeline is layered by what you bring: Apple on-device speech recognition and synthesis work with a Claude API key alone (no OpenAI account needed). Add an OpenAI key to upgrade to Whisper transcription and onyx TTS (0.92 speed — onyx at 0.92 sounds like someone who has earned the right to speak slowly). Claude Sonnet 4.6 streaming with extended thinking in the middle.
 
 ---
 
@@ -67,10 +67,12 @@ KNOWING Layer (variable — ≤800 tokens, per session)
 └── intake/knowing-layer.md   — person context, current state, open tensions
 
 iOS Application
-├── Voice pipeline: AVFoundation → Whisper → Claude → TTS → playback
+├── Voice pipeline (default): SFSpeechRecognizer → Claude → AVSpeechSynthesizer (on-device, no OpenAI needed)
+├── Voice pipeline (premium): Whisper API → Claude → OpenAI TTS onyx (requires OpenAI key)
+├── Extended thinking: Claude Sonnet 4.6 with 5000-token thinking budget
 ├── Time-of-day modes: morning (amber/gold), noon (grey/blue), night (navy/earth)
-├── Intake flow: ingest → gap analysis → dynamic questions (max 7)
-└── iCloud bridge: KNOWING layer persists across sessions
+├── Intake flow: 7 questions → KNOWING layer (≤800 tokens, persists encrypted)
+└── KNOWING layer updates silently post-session via Claude Haiku
 ```
 
 ---
@@ -99,9 +101,21 @@ This is not a demo. The app compiles, runs, and makes real API calls. The folder
 
 ## Setup
 
-See `QUICK-START.md` for 5-minute judge setup with your own API keys.
+See `QUICK-START.md` for 5-minute judge setup.
+
+**Required:** Anthropic API key (Claude). If you have a Claude Pro or Max subscription, your SDK API credits (~$20–$200/month) already cover this.
+
+**Optional:** OpenAI API key — upgrades transcription to Whisper and voice output to onyx TTS. Configure in Settings → Voice after first launch.
+
+Keys are stored in the iOS Keychain. They are never embedded in code, config files, or UserDefaults.
+
+---
+
+## Architecture Note
+
+The current app makes direct authenticated API calls from the device. A future hosted version would sit behind a backend gateway for centralized credential management and multi-agent orchestration. The character layer (ICM folder) would remain portable — the same folder that runs in the iOS app can run in any Claude Project.
 
 ---
 
 *Built for The Lyceum — Week 5 Competition · May 2026*
-*Folder + iOS app · Swift 6 · SwiftUI · Claude Sonnet 4.6 · OpenAI Whisper + TTS*
+*Folder + iOS app · Swift 6 · SwiftUI · iOS 18+ · Claude Sonnet 4.6 · Apple on-device voice (default) · OpenAI Whisper + TTS (optional)*

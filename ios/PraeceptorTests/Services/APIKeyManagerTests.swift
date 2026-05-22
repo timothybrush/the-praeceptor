@@ -23,9 +23,9 @@ final class APIKeyManagerTests: XCTestCase {
         XCTAssertFalse(manager.hasRequiredKeys)
     }
 
-    func testHasRequiredKeysIsFalseWithOnlyClaudeKey() {
+    func testHasRequiredKeysIsTrueWithOnlyClaudeKey() {
         manager.claudeKey = "sk-claude"
-        XCTAssertFalse(manager.hasRequiredKeys)
+        XCTAssertTrue(manager.hasRequiredKeys)
     }
 
     func testHasRequiredKeysIsFalseWithOnlyOpenAIKey() {
@@ -33,17 +33,17 @@ final class APIKeyManagerTests: XCTestCase {
         XCTAssertFalse(manager.hasRequiredKeys)
     }
 
-    func testHasRequiredKeysIsTrueWithBothRequiredKeys() {
+    func testHasRequiredKeysIsTrueWithClaudeAndOpenAI() {
         manager.claudeKey = "sk-claude"
         manager.openAIKey = "sk-openai"
         XCTAssertTrue(manager.hasRequiredKeys)
     }
 
-    func testElevenLabsKeyIsOptional() {
+    func testElevenLabsAndOpenAIAreOptional() {
         manager.claudeKey = "sk-claude"
-        manager.openAIKey = "sk-openai"
         XCTAssertTrue(manager.hasRequiredKeys)
         XCTAssertNil(manager.elevenLabsKey)
+        XCTAssertNil(manager.openAIKey)
     }
 
     func testSaveAndLoadClaudeKey() {

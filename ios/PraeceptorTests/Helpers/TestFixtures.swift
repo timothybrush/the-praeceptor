@@ -57,6 +57,40 @@ enum TestFixtures {
         return lines.joined(separator: "\n").data(using: .utf8)!
     }
 
+    // MARK: — Claude SSE with thinking blocks
+
+    static func claudeSSEResponseWithThinking(thinkingText: String, responseChunks: [String]) -> Data {
+        var lines: [String] = []
+        // Thinking content block
+        let escapedThinking = thinkingText.replacingOccurrences(of: "\"", with: "\\\"")
+        lines.append("data: {\"type\":\"content_block_start\",\"index\":0,\"content_block\":{\"type\":\"thinking\",\"thinking\":\"\"}}")
+        lines.append("")
+        lines.append("data: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"\(escapedThinking)\"}}")
+        lines.append("")
+        lines.append("data: {\"type\":\"content_block_stop\",\"index\":0}")
+        lines.append("")
+        // Text content block
+        lines.append("data: {\"type\":\"content_block_start\",\"index\":1,\"content_block\":{\"type\":\"text\",\"text\":\"\"}}")
+        lines.append("")
+        for chunk in responseChunks {
+            let escaped = chunk.replacingOccurrences(of: "\"", with: "\\\"")
+            lines.append("data: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"\(escaped)\"}}")
+            lines.append("")
+        }
+        lines.append("data: {\"type\":\"message_stop\"}")
+        lines.append("")
+        return lines.joined(separator: "\n").data(using: .utf8)!
+    }
+
+    // MARK: — Haiku (non-streaming)
+
+    static func haikuSuccessResponse(layerString: String) -> Data {
+        let response: [String: Any] = [
+            "content": [["type": "text", "text": layerString]]
+        ]
+        return try! JSONSerialization.data(withJSONObject: response)
+    }
+
     // MARK: — TTS
 
     static let mp3Data = Data([0xFF, 0xFB, 0x90, 0x00]) // Minimal mp3 header bytes

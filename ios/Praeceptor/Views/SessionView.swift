@@ -5,6 +5,7 @@ struct SessionView: View {
     @EnvironmentObject var apiKeyManager: APIKeyManager
     @EnvironmentObject var launchState: LaunchState
     @StateObject private var viewModel = SessionViewModel()
+    @AppStorage("mentor_name") private var mentorName: String = "The Praeceptor"
     @State private var showingSettings = false
     @State private var showTextInput = false
     @State private var textInput = ""
@@ -60,7 +61,7 @@ struct SessionView: View {
     private var headerBar: some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("The Praeceptor")
+                Text(mentorName)
                     .font(TimeOfDayTheme.display(21))
                     .foregroundColor(theme.text)
                     .kerning(-0.4)
@@ -83,15 +84,17 @@ struct SessionView: View {
                         Image(systemName: "arrow.clockwise")
                             .font(.system(size: 16))
                             .foregroundColor(theme.textSecondary)
-                            .frame(width: 34, height: 34)
+                            .frame(width: 44, height: 44)
                     }
+                    .accessibilityLabel("Restart session")
                 }
                 Button(action: { showingSettings = true }) {
                     Image(systemName: "gearshape")
                         .font(.system(size: 17))
                         .foregroundColor(theme.textSecondary)
-                        .frame(width: 34, height: 34)
+                        .frame(width: 44, height: 44)
                 }
+                .accessibilityLabel("Open settings")
             }
             .padding(.top, 2)
         }
@@ -110,12 +113,12 @@ struct SessionView: View {
                     }
 
                     ForEach(sessionStore.messages) { message in
-                        MessageBubble(message: message, theme: theme)
+                        MessageBubble(message: message, theme: theme, mentorName: mentorName)
                             .id(message.id)
                     }
 
                     if !viewModel.streamingText.isEmpty {
-                        StreamingBubble(text: viewModel.streamingText, theme: theme)
+                        StreamingBubble(text: viewModel.streamingText, theme: theme, mentorName: mentorName)
                             .id("streaming")
                     }
                 }
@@ -139,7 +142,7 @@ struct SessionView: View {
             Text("Hold to speak.")
                 .font(TimeOfDayTheme.displayItalic(36))
                 .foregroundColor(theme.text)
-            Text("The Praeceptor is listening.")
+            Text("\(mentorName) is listening.")
                 .font(TimeOfDayTheme.body(14))
                 .foregroundColor(theme.textSecondary)
                 .lineSpacing(4)
@@ -272,6 +275,8 @@ struct SessionView: View {
             .frame(height: 22)
             .opacity(phaseText.isEmpty ? 0 : 1)
             .animation(.easeInOut(duration: 0.2), value: viewModel.phase == .idle)
+            .accessibilityLabel(Text(phaseText))
+            .accessibilityHidden(phaseText.isEmpty)
     }
 
     private var phaseText: String {
@@ -313,6 +318,7 @@ struct SessionView: View {
 struct MessageBubble: View {
     let message: ChatMessage
     let theme: TimeOfDayTheme
+    let mentorName: String
 
     var isUser: Bool { message.role == .user }
 
@@ -336,6 +342,7 @@ struct MessageBubble: View {
                 )
             if !isUser { Spacer(minLength: 0) }
         }
+        .accessibilityLabel(isUser ? "You said: \(message.content)" : "\(mentorName) said: \(message.content)")
     }
 }
 
@@ -344,6 +351,7 @@ struct MessageBubble: View {
 struct StreamingBubble: View {
     let text: String
     let theme: TimeOfDayTheme
+    let mentorName: String
 
     var body: some View {
         HStack {
@@ -357,6 +365,8 @@ struct StreamingBubble: View {
                 .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
             Spacer(minLength: 0)
         }
+        .accessibilityLabel("\(mentorName) is responding")
+        .accessibilityAddTraits(.updatesFrequently)
     }
 }
 

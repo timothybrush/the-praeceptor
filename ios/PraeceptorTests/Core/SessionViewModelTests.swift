@@ -116,6 +116,24 @@ final class SessionViewModelTests: XCTestCase {
         manager.openAIKey = nil
     }
 
+    // MARK: — micDenied
+
+    func testClearMicDeniedSetsFalse() {
+        viewModel.clearMicDenied()
+        XCTAssertFalse(viewModel.micDenied)
+    }
+
+    // MARK: — Apple-only configure
+
+    func testConfigureWithClaudeKeyOnlyLeavesPhaseIdle() {
+        let manager = APIKeyManager()
+        manager.claudeKey = "sk-test-claude"
+        manager.openAIKey = nil
+        viewModel.configure(apiKeyManager: manager)
+        XCTAssertEqual(viewModel.phase, .idle)
+        manager.claudeKey = nil
+    }
+
     // MARK: — Helpers
 
     private func postInterruption(type: AVAudioSession.InterruptionType) {

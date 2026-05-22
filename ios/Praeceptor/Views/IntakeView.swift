@@ -2,6 +2,7 @@ import SwiftUI
 
 struct IntakeView: View {
     @EnvironmentObject var sessionStore: SessionStore
+    @AppStorage("mentor_name") private var mentorName: String = "The Praeceptor"
     @State private var step: IntakeStep = .welcome
     @State private var name: String = ""
     @State private var primaryMission: String = ""
@@ -162,6 +163,31 @@ struct IntakeView: View {
         }
     }
 
+    // Renders "The\nX." with "The" in regular and "X" in italic accent,
+    // or just "Name." fully italic for names that don't start with "The ".
+    @ViewBuilder
+    private var welcomeTitle: some View {
+        let words = mentorName.components(separatedBy: " ")
+        if words.count > 1, words[0].lowercased() == "the" {
+            Text(words[0] + "\n")
+                .font(TimeOfDayTheme.display(64))
+                .foregroundColor(theme.text)
+            + Text(words.dropFirst().joined(separator: " "))
+                .font(TimeOfDayTheme.displayItalic(64))
+                .foregroundColor(theme.accent)
+            + Text(".")
+                .font(TimeOfDayTheme.display(64))
+                .foregroundColor(theme.text)
+        } else {
+            Text(mentorName)
+                .font(TimeOfDayTheme.displayItalic(64))
+                .foregroundColor(theme.accent)
+            + Text(".")
+                .font(TimeOfDayTheme.display(64))
+                .foregroundColor(theme.text)
+        }
+    }
+
     // Welcome screen
     private var welcomeContent: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -172,20 +198,10 @@ struct IntakeView: View {
                 .textCase(.uppercase)
                 .padding(.bottom, 16)
 
-            Group {
-                Text("The\n")
-                    .font(TimeOfDayTheme.display(64))
-                    .foregroundColor(theme.text)
-                + Text("Praeceptor")
-                    .font(TimeOfDayTheme.displayItalic(64))
-                    .foregroundColor(theme.accent)
-                + Text(".")
-                    .font(TimeOfDayTheme.display(64))
-                    .foregroundColor(theme.text)
-            }
-            .lineSpacing(-4)
-            .kerning(-2.2)
-            .padding(.bottom, 30)
+            welcomeTitle
+                .lineSpacing(-4)
+                .kerning(-2.2)
+                .padding(.bottom, 30)
 
             Text("Before we begin, I need to know who I'm talking to.")
                 .font(TimeOfDayTheme.displayItalic(22))

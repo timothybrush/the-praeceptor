@@ -16,6 +16,10 @@ final class AudioRecorder: NSObject, ObservableObject {
     }
 
     func start() throws {
+        let audioSession = AVAudioSession.sharedInstance()
+        try audioSession.setCategory(.playAndRecord, mode: .default, options: .defaultToSpeaker)
+        try audioSession.setActive(true)
+
         let settings: [String: Any] = [
             AVFormatIDKey: Int(kAudioFormatLinearPCM),
             AVSampleRateKey: 16000,

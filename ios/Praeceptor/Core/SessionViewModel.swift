@@ -13,19 +13,29 @@ final class SessionViewModel: ObservableObject {
     private let recorder = AudioRecorder()
     private let player = AudioPlayer()
     private let liveActivity = LiveActivityManager()
+    private let networkMonitor = NetworkMonitor()
 
     private var claudeService: ClaudeService?
     private var whisperService: WhisperService?
     private var ttsService: TTSService?
+    private var appleSpeechService: AppleSpeechService?
+    private var appleTTSService: AppleTTSService?
+    private var knowingLayerUpdater: KnowingLayerUpdater?
+    private var apiKeyManager: APIKeyManager?
 
     private var interruptionObserver: Task<Void, Never>?
 
     func configure(apiKeyManager: APIKeyManager) {
-        guard let claudeKey = apiKeyManager.claudeKey,
-              let openAIKey = apiKeyManager.openAIKey else { return }
+        self.apiKeyManager = apiKeyManager
+        guard let claudeKey = apiKeyManager.claudeKey else { return }
         claudeService = ClaudeService(apiKey: claudeKey)
-        whisperService = WhisperService(apiKey: openAIKey)
-        ttsService = TTSService(apiKey: openAIKey)
+        knowingLayerUpdater = KnowingLayerUpdater(apiKey: claudeKey)
+        if appleSpeechService == nil { appleSpeechService = AppleSpeechService() }
+        if appleTTSService == nil { appleTTSService = AppleTTSService() }
+        if let openAIKey = apiKeyManager.openAIKey {
+            whisperService = WhisperService(apiKey: openAIKey)
+            ttsService = TTSService(apiKey: openAIKey)
+        }
         startInterruptionObserver()
     }
 
@@ -57,6 +67,7 @@ final class SessionViewModel: ObservableObject {
                 phase = .idle
             case .speaking:
                 player.stop()
+                appleTTSService?.stop()
                 liveActivity.endActivity()
                 phase = .idle
             default:
@@ -71,8 +82,18 @@ final class SessionViewModel: ObservableObject {
 
     // MARK: — Voice Pipeline
 
+    private var requiresNetwork: Bool {
+        let transcription = apiKeyManager?.transcriptionProvider ?? .apple
+        let tts = apiKeyManager?.ttsProvider ?? .apple
+        return transcription == .openAI || tts == .openAI || tts == .elevenLabs
+    }
+
     func startRecording() {
         guard phase == .idle else { return }
+        if requiresNetwork && !networkMonitor.isConnected {
+            setError("No internet connection. Switch to Apple voice in Settings → Voice.")
+            return
+        }
         Task {
             let granted = await AVAudioApplication.requestRecordPermission()
             guard granted else {
@@ -110,6 +131,10 @@ final class SessionViewModel: ObservableObject {
         guard phase == .idle else { return }
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
+        if requiresNetwork && !networkMonitor.isConnected {
+            setError("No internet connection. Switch to Apple voice in Settings → Voice.")
+            return
+        }
         liveActivity.startActivity(sessionLabel: TimeOfDay.current.label)
         Task {
             await runFromText(trimmed, sessionStore: sessionStore, knowingLayer: knowingLayer)
@@ -125,16 +150,25 @@ final class SessionViewModel: ObservableObject {
         sessionStore: SessionStore,
         knowingLayer: KnowingLayer?
     ) async {
-        guard let whisper = whisperService else {
-            setError("Services not configured — check API keys in Settings.")
-            return
-        }
-
         phase = .transcribing
         liveActivity.updateActivity(phase: .transcribing)
+
         let transcript: String
         do {
-            transcript = try await whisper.transcribe(audioURL: audioURL)
+            switch apiKeyManager?.transcriptionProvider ?? .apple {
+            case .apple:
+                guard let svc = appleSpeechService else {
+                    setError("Speech service not initialized.")
+                    return
+                }
+                transcript = try await svc.transcribe(audioURL: audioURL)
+            case .openAI:
+                guard let svc = whisperService else {
+                    setError("OpenAI key required for Whisper. Add it in Settings → API & Authorization.")
+                    return
+                }
+                transcript = try await svc.transcribe(audioURL: audioURL)
+            }
         } catch {
             setError(error.localizedDescription)
             return
@@ -158,8 +192,8 @@ final class SessionViewModel: ObservableObject {
         sessionStore: SessionStore,
         knowingLayer: KnowingLayer?
     ) async {
-        guard let claude = claudeService, let tts = ttsService else {
-            setError("Services not configured — check API keys in Settings.")
+        guard let claude = claudeService else {
+            setError("Claude API key required. Add it in Settings → API & Authorization.")
             return
         }
 
@@ -202,28 +236,65 @@ final class SessionViewModel: ObservableObject {
         phase = .speaking
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         liveActivity.updateActivity(phase: .speaking)
-        do {
-            let audioData = try await tts.synthesize(text: fullResponse, speed: TimeOfDay.current.ttsSpeed)
-            try player.play(data: audioData) { [weak self] in
-                Task { @MainActor in
-                    // Session close ritual: sustained rumble → fade
-                    UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-                    try? await Task.sleep(for: .milliseconds(120))
-                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                    try? await Task.sleep(for: .milliseconds(180))
-                    UIImpactFeedbackGenerator(style: .soft).impactOccurred()
-                    try? await Task.sleep(for: .milliseconds(400))
-                    self?.liveActivity.endActivity()
-                    self?.phase = .idle
-                }
+
+        switch apiKeyManager?.ttsProvider ?? .apple {
+        case .apple, .elevenLabs:
+            // elevenLabs falls through to Apple TTS until service is implemented
+            guard let svc = appleTTSService else {
+                setError("Voice service not initialized.")
+                return
             }
-        } catch {
-            setError(error.localizedDescription)
+            await svc.speak(text: fullResponse, speed: apiKeyManager?.speakingSpeed ?? TimeOfDay.current.ttsSpeed)
+            UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+            try? await Task.sleep(for: .milliseconds(120))
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            try? await Task.sleep(for: .milliseconds(180))
+            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+            try? await Task.sleep(for: .milliseconds(400))
+            liveActivity.endActivity()
+            phase = .idle
+            fireKnowingUpdate(sessionStore: sessionStore)
+
+        case .openAI:
+            guard let svc = ttsService else {
+                setError("OpenAI key required for this voice. Add it in Settings → API & Authorization.")
+                return
+            }
+            do {
+                let audioData = try await svc.synthesize(text: fullResponse, speed: apiKeyManager?.speakingSpeed ?? TimeOfDay.current.ttsSpeed)
+                try player.play(data: audioData) { [weak self] in
+                    Task { @MainActor in
+                        // Session close ritual: sustained rumble → fade
+                        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                        try? await Task.sleep(for: .milliseconds(120))
+                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                        try? await Task.sleep(for: .milliseconds(180))
+                        UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                        try? await Task.sleep(for: .milliseconds(400))
+                        self?.liveActivity.endActivity()
+                        self?.phase = .idle
+                        self?.fireKnowingUpdate(sessionStore: sessionStore)
+                    }
+                }
+            } catch {
+                setError(error.localizedDescription)
+            }
+        }
+    }
+
+    private func fireKnowingUpdate(sessionStore: SessionStore) {
+        guard let updater = knowingLayerUpdater else { return }
+        let messages = sessionStore.messages
+        let existing = sessionStore.knowingLayer
+        let mentorName = UserDefaults.standard.string(forKey: "mentor_name") ?? "The Praeceptor"
+        Task {
+            await updater.update(session: messages, existing: existing, mentorName: mentorName, store: sessionStore)
         }
     }
 
     func stopPlayback() {
         player.stop()
+        appleTTSService?.stop()
         liveActivity.endActivity()
         phase = .idle
     }
