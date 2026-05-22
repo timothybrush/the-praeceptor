@@ -30,3 +30,5 @@ APIKeys.swift
 
 # Internal build documentation
 BEHIND_THE_BUILD.md
+CONTEXT_RECOVERY.md
+SCREENSHOT_REFERENCE.md
