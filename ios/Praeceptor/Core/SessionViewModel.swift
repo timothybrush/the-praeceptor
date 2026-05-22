@@ -8,6 +8,7 @@ final class SessionViewModel: ObservableObject {
     @Published private(set) var phase: SessionPhase = .idle
     @Published private(set) var streamingText: String = ""
     @Published private(set) var audioLevel: Float = 0
+    @Published private(set) var micDenied: Bool = false
 
     private let recorder = AudioRecorder()
     private let player = AudioPlayer()
@@ -75,7 +76,7 @@ final class SessionViewModel: ObservableObject {
         Task {
             let granted = await AVAudioApplication.requestRecordPermission()
             guard granted else {
-                setError("Microphone access required. Enable it in Settings → Privacy → Microphone.")
+                micDenied = true
                 return
             }
             do {
@@ -104,19 +105,30 @@ final class SessionViewModel: ObservableObject {
         }
     }
 
+    func sendText(_ text: String, sessionStore: SessionStore, knowingLayer: KnowingLayer?) {
+        guard phase == .idle else { return }
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        liveActivity.startActivity(sessionLabel: TimeOfDay.current.label)
+        Task {
+            await runFromText(trimmed, sessionStore: sessionStore, knowingLayer: knowingLayer)
+        }
+    }
+
+    func clearMicDenied() {
+        micDenied = false
+    }
+
     private func runPipeline(
         audioURL: URL,
         sessionStore: SessionStore,
         knowingLayer: KnowingLayer?
     ) async {
-        guard let whisper = whisperService,
-              let claude = claudeService,
-              let tts = ttsService else {
+        guard let whisper = whisperService else {
             setError("Services not configured — check API keys in Settings.")
             return
         }
 
-        // 1. Transcribe
         phase = .transcribing
         liveActivity.updateActivity(phase: .transcribing)
         let transcript: String
@@ -132,9 +144,22 @@ final class SessionViewModel: ObservableObject {
             return
         }
 
-        sessionStore.appendMessage(ChatMessage(role: .user, content: transcript, timestamp: Date()))
+        await runFromText(transcript, sessionStore: sessionStore, knowingLayer: knowingLayer)
+    }
 
-        // 2. Stream Claude response
+    private func runFromText(
+        _ text: String,
+        sessionStore: SessionStore,
+        knowingLayer: KnowingLayer?
+    ) async {
+        guard let claude = claudeService, let tts = ttsService else {
+            setError("Services not configured — check API keys in Settings.")
+            return
+        }
+
+        sessionStore.appendMessage(ChatMessage(role: .user, content: text, timestamp: Date()))
+
+        // 1. Stream Claude response
         phase = .thinking
         liveActivity.updateActivity(phase: .thinking)
         streamingText = ""
@@ -167,7 +192,7 @@ final class SessionViewModel: ObservableObject {
         sessionStore.appendMessage(ChatMessage(role: .assistant, content: fullResponse, timestamp: Date()))
         streamingText = ""
 
-        // 3. TTS + Playback
+        // 2. TTS + Playback
         phase = .speaking
         liveActivity.updateActivity(phase: .speaking)
         do {

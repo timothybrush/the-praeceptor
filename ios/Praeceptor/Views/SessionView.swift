@@ -6,6 +6,8 @@ struct SessionView: View {
     @EnvironmentObject var launchState: LaunchState
     @StateObject private var viewModel = SessionViewModel()
     @State private var showingSettings = false
+    @State private var showTextInput = false
+    @State private var textInput = ""
 
     private var theme: TimeOfDayTheme {
         TimeOfDayTheme.current(TimeOfDay.current)
@@ -37,6 +39,11 @@ struct SessionView: View {
             guard shouldStart else { return }
             launchState.startRecording = false
             viewModel.startRecording()
+        }
+        .onChange(of: viewModel.micDenied) { _, denied in
+            guard denied else { return }
+            withAnimation(.easeInOut(duration: 0.2)) { showTextInput = true }
+            viewModel.clearMicDenied()
         }
         .sheet(isPresented: $showingSettings) {
             SettingsView(apiKeyManager: apiKeyManager)
@@ -137,9 +144,7 @@ struct SessionView: View {
                 phase: viewModel.phase,
                 audioLevel: viewModel.audioLevel,
                 theme: theme,
-                onHold: {
-                    viewModel.startRecording()
-                },
+                onHold: { viewModel.startRecording() },
                 onRelease: {
                     viewModel.stopRecording(
                         sessionStore: sessionStore,
@@ -148,12 +153,73 @@ struct SessionView: View {
                 }
             )
 
+            if showTextInput {
+                textInputBar
+            } else {
+                voiceFooter
+            }
+        }
+        .padding(.top, 8)
+    }
+
+    private var voiceFooter: some View {
+        HStack(spacing: 6) {
             Text("Hold to speak · Release to send")
                 .font(.system(size: 12))
                 .foregroundColor(theme.textSecondary)
-                .padding(.bottom, 48)
+            Button {
+                withAnimation(.easeInOut(duration: 0.2)) { showTextInput = true }
+            } label: {
+                Image(systemName: "keyboard")
+                    .font(.system(size: 13))
+                    .foregroundColor(theme.textSecondary.opacity(0.5))
+            }
         }
-        .padding(.top, 8)
+        .padding(.bottom, 48)
+    }
+
+    private var textInputBar: some View {
+        HStack(alignment: .bottom, spacing: 8) {
+            TextField("Type a message...", text: $textInput, axis: .vertical)
+                .font(.system(size: 15))
+                .foregroundColor(theme.text)
+                .tint(theme.accent)
+                .lineLimit(1...4)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .background(theme.surface)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+
+            if !textInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+               viewModel.phase == .idle {
+                Button(action: submitText) {
+                    Image(systemName: "arrow.up.circle.fill")
+                        .font(.system(size: 30))
+                        .foregroundColor(theme.accent)
+                }
+            }
+
+            Button {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    showTextInput = false
+                    textInput = ""
+                }
+            } label: {
+                Image(systemName: "mic.fill")
+                    .font(.system(size: 16))
+                    .foregroundColor(theme.textSecondary.opacity(0.6))
+                    .frame(width: 30, height: 30)
+            }
+        }
+        .padding(.horizontal, 24)
+        .padding(.bottom, 48)
+    }
+
+    private func submitText() {
+        let trimmed = textInput.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        textInput = ""
+        viewModel.sendText(trimmed, sessionStore: sessionStore, knowingLayer: sessionStore.knowingLayer)
     }
 
     private var phaseIndicator: some View {
