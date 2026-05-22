@@ -82,6 +82,7 @@ final class SessionViewModel: ObservableObject {
             do {
                 try recorder.start()
                 phase = .recording
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
                 liveActivity.startActivity(sessionLabel: TimeOfDay.current.label)
                 // Mirror audio level from recorder into viewModel
                 Task { @MainActor [weak self] in
@@ -144,6 +145,11 @@ final class SessionViewModel: ObservableObject {
             return
         }
 
+        // Transcription complete: soft double-tap — something was understood
+        UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+        try? await Task.sleep(for: .milliseconds(80))
+        UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+
         await runFromText(transcript, sessionStore: sessionStore, knowingLayer: knowingLayer)
     }
 
@@ -194,13 +200,20 @@ final class SessionViewModel: ObservableObject {
 
         // 2. TTS + Playback
         phase = .speaking
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         liveActivity.updateActivity(phase: .speaking)
         do {
             let audioData = try await tts.synthesize(text: fullResponse, speed: TimeOfDay.current.ttsSpeed)
             try player.play(data: audioData) { [weak self] in
                 Task { @MainActor in
-                    self?.liveActivity.endActivity()
+                    // Session close ritual: sustained rumble → fade
+                    UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                    try? await Task.sleep(for: .milliseconds(120))
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                    try? await Task.sleep(for: .milliseconds(180))
                     UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                    try? await Task.sleep(for: .milliseconds(400))
+                    self?.liveActivity.endActivity()
                     self?.phase = .idle
                 }
             }

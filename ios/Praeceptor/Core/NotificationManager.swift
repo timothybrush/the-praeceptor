@@ -34,24 +34,24 @@ enum SessionReminder: String, CaseIterable {
         switch self {
         case .morning:
             return [
-                "The day is starting.",
-                "Morning session.",
-                "What are you building today?",
-                "Begin before the noise does."
+                "Begin before the noise does.\n— Seneca",
+                "Most people plan the day. The rest have already started.\n— Grove",
+                "What are you building today?\n— Morning session.",
+                "The first hour sets the trajectory. It's starting now.\n— The Praeceptor"
             ]
         case .midday:
             return [
-                "Where are you?",
-                "Midday session.",
-                "Half the day is gone. Check in.",
-                "What happened to what you said this morning?"
+                "What happened to what you said this morning?\n— Check in.",
+                "You're either closing the distance or you're drifting.\n— Midday.",
+                "Half the day is gone. The gap between intent and action is measured in afternoons like this.\n— The Praeceptor",
+                "The work is either moving or it isn't. Come find out.\n— Naval"
             ]
         case .evening:
             return [
-                "The session is open.",
-                "Evening session.",
-                "Ready when you are.",
-                "The day isn't closed yet."
+                "Before you close the day — a few minutes.\n— Aurelius",
+                "The session is open.\n— Evening.",
+                "What happened today that you haven't sat with yet?\n— The Praeceptor",
+                "The day isn't closed yet.\n— Come in."
             ]
         }
     }

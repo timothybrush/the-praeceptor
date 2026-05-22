@@ -4,21 +4,40 @@ import SwiftUI
 struct PraeceptorEntry: TimelineEntry {
     let date: Date
     let sessionLabel: String
+    let quote: String
+
+    static let characterQuotes: [String] = [
+        "The gap between what you said\nyou'd do and what you did.\n— The Praeceptor",
+        "Begin before the noise does.\n— Seneca",
+        "Reality is neutral.\nYour story about it isn't.\n— Naval",
+        "The standard is the standard.\n— Walsh",
+        "Every day you waste\nis one you can't make up.\n— Munger",
+        "What are you avoiding\nby focusing on this?\n— The Praeceptor",
+        "Who benefits\nif this stays unclear?\n— The Praeceptor",
+        "Most people plan the day.\nThe rest have already started.\n— Grove",
+        "You're either closing the distance\nor you're drifting.\n— Midday.",
+        "What would you tell someone else\nin your exact position?\n— The Praeceptor",
+    ]
 }
 
 struct PraeceptorTimelineProvider: TimelineProvider {
     func placeholder(in context: Context) -> PraeceptorEntry {
-        PraeceptorEntry(date: Date(), sessionLabel: "Evening session")
+        PraeceptorEntry(date: Date(), sessionLabel: "Evening session", quote: PraeceptorEntry.characterQuotes[0])
     }
 
     func getSnapshot(in context: Context, completion: @escaping (PraeceptorEntry) -> Void) {
-        completion(PraeceptorEntry(date: Date(), sessionLabel: currentSessionLabel()))
+        completion(PraeceptorEntry(date: Date(), sessionLabel: currentSessionLabel(), quote: quoteOfTheDay()))
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<PraeceptorEntry>) -> Void) {
-        let entry = PraeceptorEntry(date: Date(), sessionLabel: currentSessionLabel())
+        let entry = PraeceptorEntry(date: Date(), sessionLabel: currentSessionLabel(), quote: quoteOfTheDay())
         let nextHour = Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date()
         completion(Timeline(entries: [entry], policy: .after(nextHour)))
+    }
+
+    private func quoteOfTheDay() -> String {
+        let day = Calendar.current.ordinality(of: .day, in: .year, for: Date()) ?? 1
+        return PraeceptorEntry.characterQuotes[day % PraeceptorEntry.characterQuotes.count]
     }
 
     private func currentSessionLabel() -> String {
@@ -98,10 +117,11 @@ struct PraeceptorWidgetView: View {
                     .font(.system(size: 12))
                     .foregroundColor(textMuted)
                 Spacer()
-                Text("Hold to speak.\nThe Praeceptor is ready.")
-                    .font(.system(size: 12))
-                    .foregroundColor(textPrimary.opacity(0.7))
-                    .lineLimit(2)
+                Text(entry.quote)
+                    .font(.system(size: 11))
+                    .foregroundColor(textPrimary.opacity(0.75))
+                    .lineLimit(3)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
