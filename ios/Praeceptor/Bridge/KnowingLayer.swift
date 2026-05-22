@@ -44,4 +44,41 @@ final class KnowingLayerBridge: ObservableObject {
     }
 
     var hasKnowingLayer: Bool { knowingLayer != nil }
+
+    // MARK: — Supplemental Context
+
+    func updateSupplementalContext(_ text: String) {
+        guard var layer = knowingLayer else { return }
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        layer.supplementalContext = trimmed.isEmpty ? nil : String(trimmed.prefix(KnowingLayer.supplementalContextLimit))
+        save(layer)
+    }
+
+    func clearSupplementalContext() {
+        guard var layer = knowingLayer else { return }
+        layer.supplementalContext = nil
+        save(layer)
+    }
+
+    // MARK: — iCloud Context Folder
+
+    var contextFolderURL: URL? {
+        FileManager.default
+            .url(forUbiquityContainerIdentifier: nil)?
+            .appendingPathComponent("Documents")
+            .appendingPathComponent("Praeceptor")
+    }
+
+    func scanICloudContextFolder() -> String? {
+        guard let folder = contextFolderURL else { return nil }
+        let fm = FileManager.default
+        guard let files = try? fm.contentsOfDirectory(at: folder, includingPropertiesForKeys: nil)
+            .filter({ ["txt", "json"].contains($0.pathExtension.lowercased()) })
+            .sorted(by: { $0.lastPathComponent < $1.lastPathComponent })
+        else { return nil }
+        guard !files.isEmpty else { return nil }
+        let combined = files.compactMap { try? String(contentsOf: $0, encoding: .utf8) }
+            .joined(separator: "\n\n---\n\n")
+        return combined.isEmpty ? nil : combined
+    }
 }

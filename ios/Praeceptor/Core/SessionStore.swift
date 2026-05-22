@@ -52,6 +52,10 @@ final class SessionStore: ObservableObject {
         hasIntakeCompleted = true
     }
 
+    func updateProfile(_ layer: KnowingLayer) {
+        bridge.save(layer)
+    }
+
     func resetIntake() {
         bridge.reset()
         hasIntakeCompleted = false

@@ -35,6 +35,7 @@
 		ABA3FF7D8A5D7868782FF046 /* LaunchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB32EAE267AC7CDE5162303 /* LaunchState.swift */; };
 		C57CEB41BFDDE27F130C0E41 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C27669154B9B64B44576E9 /* AudioRecorder.swift */; };
 		CA8689AF72E3E2BF30827C69 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DA5F2F3A099F151AA3CF67 /* SettingsView.swift */; };
+		F1A2B3C4D5E6F7081920A1B2 /* ProfileContextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B3C4D5E6F708192031B2C3 /* ProfileContextView.swift */; };
 		CD443276C5CF7EC8BF2893BE /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA8DDF073B53BBCCE9A1C57 /* AudioPlayer.swift */; };
 		D230B163320353B5BD0D4849 /* IntakeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF91739E4175C13E7DEDABB5 /* IntakeView.swift */; };
 		D813C8517A77A17E2D41D6C9 /* TimeOfDayTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A36E7212CC957609D377707 /* TimeOfDayTheme.swift */; };
@@ -101,6 +102,7 @@
 		7F36DF415701758D29769562 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		8386C6D2E102FB09B4FAD87D /* SystemPromptBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemPromptBuilder.swift; sourceTree = "<group>"; };
 		85DA5F2F3A099F151AA3CF67 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A2B3C4D5E6F708192031B2C3 /* ProfileContextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileContextView.swift; sourceTree = "<group>"; };
 		8948A142D027D832CD0B9370 /* WhisperService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhisperService.swift; sourceTree = "<group>"; };
 		8B6EC06EC8B6C67786BAE8DD /* SessionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionViewModel.swift; sourceTree = "<group>"; };
 		9DA8DDF073B53BBCCE9A1C57 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 			children = (
 				0100F35A6A553738DBF2F0DE /* HoldToSpeakButton.swift */,
 				FF91739E4175C13E7DEDABB5 /* IntakeView.swift */,
+				A2B3C4D5E6F708192031B2C3 /* ProfileContextView.swift */,
 				AC162C241D9EF02A0956D9A1 /* SessionView.swift */,
 				85DA5F2F3A099F151AA3CF67 /* SettingsView.swift */,
 				1A36E7212CC957609D377707 /* TimeOfDayTheme.swift */,
@@ -453,6 +456,7 @@
 				918CD0B5E7729392C38AAFD7 /* SessionView.swift in Sources */,
 				A22761AE476328EA8BB43830 /* SessionViewModel.swift in Sources */,
 				CA8689AF72E3E2BF30827C69 /* SettingsView.swift in Sources */,
+				F1A2B3C4D5E6F7081920A1B2 /* ProfileContextView.swift in Sources */,
 				3E80C07318F3365FEB5799AF /* SystemPromptBuilder.swift in Sources */,
 				4CF2F8A1499B146C71CD136C /* TTSService.swift in Sources */,
 				D813C8517A77A17E2D41D6C9 /* TimeOfDayTheme.swift in Sources */,

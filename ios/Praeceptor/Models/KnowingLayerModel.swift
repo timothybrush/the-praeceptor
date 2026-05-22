@@ -10,6 +10,9 @@ struct KnowingLayer: Codable {
     var hisDirective: String?
     var patternsHeSees: [String]
     var nextSessionIntent: String?
+    var supplementalContext: String?
+
+    static let supplementalContextLimit = 2000
 
     struct PersonContext: Codable {
         var name: String
@@ -52,7 +55,8 @@ struct KnowingLayer: Codable {
             thesisDrift: nil,
             hisDirective: nil,
             patternsHeSees: [],
-            nextSessionIntent: nil
+            nextSessionIntent: nil,
+            supplementalContext: nil
         )
     }
 
@@ -81,6 +85,9 @@ struct KnowingLayer: Codable {
         }
         if let directive = hisDirective {
             parts.append("His directive (unacknowledged): \(directive)")
+        }
+        if let supplemental = supplementalContext, !supplemental.isEmpty {
+            parts.append("Additional context:\n\(supplemental)")
         }
         return parts.joined(separator: "\n")
     }

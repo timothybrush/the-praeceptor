@@ -3,11 +3,13 @@ import SwiftUI
 struct SettingsView: View {
     @ObservedObject var apiKeyManager: APIKeyManager
     @EnvironmentObject var notificationManager: NotificationManager
+    @EnvironmentObject var sessionStore: SessionStore
     @Environment(\.dismiss) private var dismiss
 
     @State private var claudeKey: String = ""
     @State private var openAIKey: String = ""
     @State private var elevenLabsKey: String = ""
+    @State private var showProfileContext = false
 
     var body: some View {
         NavigationStack {
@@ -63,6 +65,27 @@ struct SettingsView: View {
                     Text("Opt in to any. He doesn't chase.")
                 }
 
+                if sessionStore.knowingLayer != nil {
+                    Section {
+                        Button {
+                            showProfileContext = true
+                        } label: {
+                            HStack {
+                                Text("Profile & Context")
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 13))
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                        .foregroundStyle(.primary)
+                    } header: {
+                        Text("The Praeceptor Knows")
+                    } footer: {
+                        Text("Edit your answers from intake. Add context files to deepen his understanding.")
+                    }
+                }
+
                 Section {
                     Button("Save Keys") {
                         saveKeys()
@@ -83,6 +106,10 @@ struct SettingsView: View {
             claudeKey = apiKeyManager.claudeKey ?? ""
             openAIKey = apiKeyManager.openAIKey ?? ""
             elevenLabsKey = apiKeyManager.elevenLabsKey ?? ""
+        }
+        .sheet(isPresented: $showProfileContext) {
+            ProfileContextView()
+                .environmentObject(sessionStore)
         }
     }
 
