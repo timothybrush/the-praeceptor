@@ -1,0 +1,49 @@
+name: Praeceptor
+options:
+  bundleIdPrefix: com.meinc
+  deploymentTarget:
+    iOS: "18.0"
+  xcodeVersion: "16.3"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: 6.0
+    IPHONEOS_DEPLOYMENT_TARGET: 18.0
+    ENABLE_BITCODE: NO
+    DEVELOPMENT_TEAM: ""
+
+targets:
+  Praeceptor:
+    type: application
+    platform: iOS
+    deploymentTarget: "18.0"
+    sources:
+      - Praeceptor
+    resources:
+      - Praeceptor/Resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.meinc.praeceptor
+        INFOPLIST_FILE: Praeceptor/Resources/Info.plist
+        SWIFT_VERSION: 6.0
+        CURRENT_PROJECT_VERSION: 1
+        MARKETING_VERSION: 1.0.0
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: ""
+    info:
+      path: Praeceptor/Resources/Info.plist
+      properties:
+        CFBundleName: Praeceptor
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "1"
+        NSMicrophoneUsageDescription: "The Praeceptor listens to your voice so you can speak directly into the session."
+        NSDocumentsFolderUsageDescription: "Used to read context from iCloud."
+        UILaunchScreen:
+          UIColorName: ""
+        UIRequiredDeviceCapabilities:
+          - arm64
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false

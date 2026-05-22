@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode
+ios/Praeceptor.xcodeproj/project.xcworkspace/xcuserdata/
+ios/Praeceptor.xcodeproj/xcuserdata/
+ios/DerivedData/
+ios/*.xcworkspace
+*.xccheckout
+*.xcscmblueprint
+
+# Build artifacts
+ios/build/
+ios/*.ipa
+ios/*.dSYM.zip
+ios/*.dSYM
+
+# CocoaPods / SPM
+ios/Pods/
+ios/.build/
+ios/Package.resolved
+
+# API keys / secrets
+*.env
+.env*
+Secrets.swift
+APIKeys.swift
