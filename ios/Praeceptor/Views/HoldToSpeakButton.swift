@@ -16,7 +16,7 @@ struct HoldToSpeakButton: View {
 
     var isProcessing: Bool {
         switch phase {
-        case .transcribing, .thinking: return true
+        case .transcribing, .thinking, .speaking: return true
         default: return false
         }
     }

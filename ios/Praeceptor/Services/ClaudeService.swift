@@ -3,7 +3,7 @@ import Foundation
 struct ClaudeService: Sendable {
     private let apiKey: String
     private let model = "claude-sonnet-4-6"
-    private let maxTokens = 1024
+    private let maxTokens = 2048
 
     init(apiKey: String) {
         self.apiKey = apiKey

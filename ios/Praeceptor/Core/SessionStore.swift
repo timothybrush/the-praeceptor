@@ -4,9 +4,6 @@ import SwiftUI
 @MainActor
 final class SessionStore: ObservableObject {
     @Published var messages: [ChatMessage] = []
-    @Published var phase: SessionPhase = .idle
-    @Published var streamingText: String = ""
-
     @AppStorage("intake_completed") var hasIntakeCompleted: Bool = false
 
     let bridge = KnowingLayerBridge()
@@ -19,8 +16,6 @@ final class SessionStore: ObservableObject {
 
     func clearSession() {
         messages = []
-        streamingText = ""
-        phase = .idle
     }
 
     func completeIntake(layer: KnowingLayer) {

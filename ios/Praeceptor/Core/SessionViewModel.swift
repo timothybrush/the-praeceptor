@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import AVFoundation
 
 @MainActor
 final class SessionViewModel: ObservableObject {
@@ -27,11 +28,18 @@ final class SessionViewModel: ObservableObject {
 
     func startRecording() {
         guard phase == .idle else { return }
-        do {
-            try recorder.start()
-            phase = .recording
-        } catch {
-            phase = .error(error.localizedDescription)
+        Task {
+            let granted = await AVAudioApplication.requestRecordPermission()
+            guard granted else {
+                phase = .error("Microphone access is required. Please enable it in Settings.")
+                return
+            }
+            do {
+                try recorder.start()
+                phase = .recording
+            } catch {
+                phase = .error(error.localizedDescription)
+            }
         }
     }
 

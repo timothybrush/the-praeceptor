@@ -8,6 +8,8 @@ struct TTSService {
     }
 
     func synthesize(text: String, speed: Double = 0.92) async throws -> Data {
+        // OpenAI TTS hard limit is 4096 characters
+        let input = text.count > 4096 ? String(text.prefix(4096)) : text
         let url = URL(string: "https://api.openai.com/v1/audio/speech")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -16,7 +18,7 @@ struct TTSService {
 
         let body: [String: Any] = [
             "model": "tts-1",
-            "input": text,
+            "input": input,
             "voice": "onyx",
             "speed": speed,
             "response_format": "mp3"
