@@ -1,6 +1,6 @@
 name: Praeceptor
 options:
-  bundleIdPrefix: com.meinc
+  bundleIdPrefix: com.praeceptor
   deploymentTarget:
     iOS: "18.0"
   xcodeVersion: "16.3"
@@ -24,7 +24,7 @@ targets:
       - Praeceptor/Resources
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.meinc.praeceptor
+        PRODUCT_BUNDLE_IDENTIFIER: com.praeceptor.praeceptor
         INFOPLIST_FILE: Praeceptor/Resources/Info.plist
         SWIFT_VERSION: 6.0
         CURRENT_PROJECT_VERSION: 1

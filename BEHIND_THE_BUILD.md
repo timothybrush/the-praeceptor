@@ -147,7 +147,7 @@ The Praeceptor's behavioral DNA is sourced. Not approximated — sourced.
 - Andy Grove HOM Frameworks + Quotes — leverage thinking, TRM, management by objectives
 - Bill Campbell's 33 Principles — session structure, how he asked vs told, the courage evangelist
 
-**Awaiting books from Ariel (CC_INBOX upload):**
+**Books staged for research:**
 High Output Management · The Score Takes Care of Itself · Radical Candor · The Hard Thing About Hard Things · The Effective Executive · Letters from a Stoic · Meditations · Poor Charlie's Almanack · Trillion Dollar Coach · Creativity Inc · Mastery · 48 Laws of Power
 
 ---
@@ -185,7 +185,7 @@ High Output Management · The Score Takes Care of Itself · Radical Candor · Th
 
 The books arrived. Not from an upload — they were already here.
 
-A search across CC_INBOX and the MeInc operator library turned up nine of the critical books already on disk. The Effective Executive (Drucker), Trillion Dollar Coach (Campbell), The Score Takes Care of Itself (Walsh), Radical Candor (Kim Scott), The Hard Thing About Hard Things (Horowitz), Creativity Inc. (Catmull), Poor Charlie's Almanack, Thinking Fast and Slow (Kahneman), and Five Dysfunctions of a Team (Lencioni) — all present, in EPUB, MOBI, or PDF format. High Output Management was already in the operator reading stack as a PDF. All five Robert Greene books were in the frameworks folder, some in duplicate across multiple locations.
+A search across the local library turned up nine of the critical books already on disk. The Effective Executive (Drucker), Trillion Dollar Coach (Campbell), The Score Takes Care of Itself (Walsh), Radical Candor (Kim Scott), The Hard Thing About Hard Things (Horowitz), Creativity Inc. (Catmull), Poor Charlie's Almanack, Thinking Fast and Slow (Kahneman), and Five Dysfunctions of a Team (Lencioni) — all present, in EPUB, MOBI, or PDF format. High Output Management was already in the operator reading stack as a PDF. All five Robert Greene books were in the frameworks folder, some in duplicate across multiple locations.
 
 The only three books not found anywhere: Seneca's Letters from a Stoic, Marcus Aurelius's Meditations, and the Naval Almanack. All three are public domain or freely licensed. They can be fetched without an upload.
 
@@ -318,9 +318,9 @@ Seventeen Swift files written across six architectural layers. The project was g
 
 **What's still open:**
 - `outputs/` folder — example session transcripts (elevation stack Layer 3)
-- GitHub repository — needed for competition submission (requires Ariel to authorize)
+- GitHub repository — needed for competition submission
 - LICENSE file
-- Loom walkthrough recording — requires Ariel at the screen
+- Loom walkthrough recording
 - Final submission to Skool community
 
 **Deadline:** Sunday May 24, 12:00 PM EST. 1-hour buffer target: 11:00 AM EST.
@@ -349,14 +349,71 @@ Three sessions. Three different moves. The gap question, the bar catch, the refu
 - Elevation stack Layer 3 (example outputs) fully built
 
 **What's still open:**
-- GitHub repository — requires Ariel's authorization before any push
+- GitHub repository
 - LICENSE file
-- Loom walkthrough recording — requires Ariel at the screen
-- Final submission to Skool community — requires Ariel's approval
+- Loom walkthrough recording
+- Final submission to Skool community
 
 **Deadline:** Sunday May 24, 12:00 PM EST. 1-hour buffer target: 11:00 AM EST.
 
 ---
 
+---
+
+### 2026-05-21 — Day 1, Update 6 — The Repository Is Live.
+
+The GitHub repository is up: **https://github.com/orteug/the-praeceptor**
+
+43 files, 3,709 lines. Clean initial commit. Everything in — the ICM folder, the iOS app (full Swift source + Xcode project), the competition submission files, the example session outputs, the build log.
+
+The `.gitignore` was written to cover Xcode-specific artifacts: xcuserdata, build directories, DerivedData, CocoaPods, SPM caches. The `.xcodeproj` itself went in — judges need it to build. User-specific data excluded. The MIT LICENSE is in the root. The repo description follows the `agency-os` pattern: one sentence, direct.
+
+The pattern here is the same as Week 4. `orteug/agency-os` was the folder that won. `orteug/the-praeceptor` is the folder that has an app attached to it.
+
+**What changed this update:**
+- `.gitignore` written — Xcode artifacts excluded, secrets excluded
+- `LICENSE` written — MIT, 2026
+- Git repository initialized in `praeceptor/` root
+- Initial commit: 43 files, 3,709 insertions
+- `orteug/the-praeceptor` created as public repo on GitHub
+- Pushed to `origin/main`
+
+**What's still open:**
+- Loom walkthrough recording — requires simulator running
+- Final submission post to The Lyceum Skool community
+
+**Deadline:** Sunday May 24, 12:00 PM EST. 1-hour buffer target: 11:00 AM EST.
+
+---
+
+---
+
+### 2026-05-21 — Day 1, Update 7 — Design Brief Written.
+
+The build is pausing on implementation to bring in visual design. A `design-brief.md` was written and dropped at the praeceptor root — a complete spec intended for a design AI to consume without context from this session.
+
+The brief covers four screens (Settings, Intake, Session, root routing), all three time-of-day themes with exact RGB seed values, every element in the hold-to-speak button and its phase-driven states, the real-time pulse ring behavior, typography current state and open questions, and a clear partition between what the designer has latitude on and what cannot change.
+
+The hardest part to communicate was the character constraint — not aesthetic preference, but character. The brief opens with two sections before touching any screen: what this app is, and what it must not feel like. The second section is longer. No coaching startup gradients. No wellness app softness. No productivity tool dashboard logic. The reference is not an app — it's a room. A mentor's study.
+
+The design AI gets the brief plus the pulled inspiration. The output — color specs, font decisions, layout — comes back to be wired into the existing SwiftUI view files. The implementation layer is already built and waiting. This is purely a visual pass.
+
+One technical note included for whoever implements the design: the pulse ring's `animation(.easeOut(duration: 0.05))` is functional, not decorative. It responds to live microphone audio level in near-real-time. Any design that slows it to an ambient pulse loses the feedback that tells the user they're actually being heard.
+
+**What changed this update:**
+- `design-brief.md` written — 4 screens, 3 themes, full spec, implementation handoff format
+- Repo is live at github.com/orteug/the-praeceptor
+- Build is in design hold — implementation resumes when design output returns
+
+**What's still open:**
+- Design output — inspiration pass in progress
+- Loom walkthrough — requires simulator running
+- Final submission to The Lyceum Skool community
+
+**Deadline:** Sunday May 24, 12:00 PM EST. 1-hour buffer target: 11:00 AM EST.
+**Time remaining:** ~58 hours.
+
+---
+
 *Last updated: 2026-05-21 — auto-loop active every 20 min (job bb0408e2)*
-*Next: GitHub repo (awaiting Ariel authorization) → Loom → submission*
+*Next: design output returns → implement into SwiftUI → Loom → submission*

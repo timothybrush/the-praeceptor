@@ -3,7 +3,7 @@ import Security
 
 @MainActor
 final class APIKeyManager: ObservableObject {
-    private let keychainService = "com.meinc.praeceptor"
+    private let keychainService = "com.praeceptor.app"
 
     @Published var hasRequiredKeys: Bool = false
 

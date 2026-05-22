@@ -35,4 +35,4 @@ Status: [Active catch | Graduating to: filename.md §section]
 
 ## Notes for Review
 
-After every 5 sessions: review this file. If any catch has 3+ instances, draft the addition to the target file and surface to Ariel for approval before writing.
+After every 5 sessions: review this file. If any catch has 3+ instances, draft the addition to the target file and review before writing.

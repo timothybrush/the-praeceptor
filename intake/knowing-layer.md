@@ -58,34 +58,49 @@ The variable context layer. ≤800 tokens. Written by The Praeceptor at session 
 
 ```json
 {
-  "updated": "2026-05-21T22:00:00Z",
+  "updated": "2026-05-15T09:00:00Z",
   "person": {
-    "name": "Ariel",
-    "primary_mission": "Building a portfolio of self-funding ventures toward full sovereignty",
-    "sovereignty_stage": "FedEx — W2 safety net at $2K/mo, targeting $4K/mo MRR for exit conversation",
-    "original_thesis": "Directory-first revenue engine, then operator community, then capital stack"
+    "name": "Marcus",
+    "primary_mission": "Build a B2B SaaS product on top of the consulting relationships he already has",
+    "sovereignty_stage": "Consulting covers expenses — wants to stop trading time for money within 18 months",
+    "original_thesis": "Productize the retainer: same work, fixed price, scalable delivery"
   },
   "current_state": {
-    "active_project": "Praeceptor — competition submission",
-    "active_phase": "iOS build + ICM folder",
-    "what_they_are_doing": "Building a production iOS mentor app for a Skool competition with a Sunday deadline",
-    "what_they_said_they_would_do": "Win the competition and use it to validate the product-as-differentiator thesis"
+    "active_project": "Pitch deck for seed raise",
+    "active_phase": "Refinement — third revision",
+    "what_they_are_doing": "Polishing financial model and competitive analysis section",
+    "what_they_said_they_would_do": "Send the deck to two warm contacts by end of last week"
   },
   "last_three_sessions": [
     {
-      "date": "2026-05-21",
-      "what_surfaced": "Competition is real enough to build something production-grade — not just a folder submission",
-      "what_was_decided": "iOS app is non-negotiable; ICM folder alone doesn't win",
+      "date": "2026-05-15",
+      "what_surfaced": "Deck has been in refinement for four months with no investor conversations started",
+      "what_was_decided": "Deck is ready — the refinement loop is avoidance, not preparation",
+      "what_was_avoided": "Whether the consulting work is actually fundable or just a lifestyle business"
+    },
+    {
+      "date": "2026-05-08",
+      "what_surfaced": "Two practice runs done, last one two months ago — no external feedback since",
+      "what_was_decided": "Need real feedback from investors, not co-founder and friends",
       "what_was_avoided": null
+    },
+    {
+      "date": "2026-05-01",
+      "what_surfaced": "Revenue projections built on assumptions that have never been tested with a paying customer",
+      "what_was_decided": null,
+      "what_was_avoided": "Conversation about whether the product has been validated at all"
     }
   ],
   "open_tensions": [
-    "Competition deadline is Sunday — iOS build hasn't started yet",
-    "Multiple research pipelines running in parallel may be dispersal masquerading as thoroughness"
+    "Deck is a proxy for the real fear — that the first investor conversation will expose the thesis",
+    "Consulting clients are comfortable with him as a person, not committed to the product"
   ],
-  "thesis_drift": null,
-  "his_directive": null,
-  "patterns_he_sees": [],
-  "next_session_intent": "Check iOS scaffold progress — have the build started or is it still in research?"
+  "thesis_drift": "Original thesis was productize the retainer. Current pitch is a platform play with ARR projections. The productized retainer never shipped.",
+  "his_directive": "Send the deck to two contacts this week. Not polish it. Send it.",
+  "patterns_he_sees": [
+    "Motion mistaken for momentum — active refinement, no forward movement",
+    "Mistaking learning for action — more research instead of first conversation"
+  ],
+  "next_session_intent": "Open with: did you send it? If not, that's what we're talking about."
 }
 ```
