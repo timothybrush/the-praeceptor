@@ -415,5 +415,37 @@ One technical note included for whoever implements the design: the pulse ring's 
 
 ---
 
+---
+
+### 2026-05-21 — Day 1, Update 8 — Security Pass. Repo Is Clean.
+
+Before this build goes further, a full scan of every public-facing file for sensitive data. The repo went up before that pass ran. Six things found, six things fixed, committed and pushed.
+
+**What was found and removed:**
+
+The most significant: the `intake/knowing-layer.md` example was populated with real data — real name, real financial position, real current project. The example exists to show the schema in use. It should have been fictional from the start. It's now a fully fleshed-out fictional persona — Marcus, a software consulting founder, four months into a pitch deck refinement loop with no investor conversations started. The example is better for it. A fictional person in a plausible, specific situation demonstrates the schema more usefully than the real thing would have.
+
+The LICENSE had a full legal name. Changed to "The Praeceptor Contributors."
+
+The iOS bundle identifier was `com.meinc.praeceptor` in both `project.yml` and `APIKeyManager.swift` — the Keychain service name. Changed to `com.praeceptor` and `com.praeceptor.app`. The app builds with this identifier. Anyone cloning the repo won't see a trace of the internal brand.
+
+The build log itself had a name appearing eleven times across four updates — in process notes about authorization, Loom recording, design handoffs. All stripped. The references to internal infrastructure (`CC_INBOX`, `MeInc operator library`) in Update 2 were rewritten to read as any builder's local library.
+
+`patterns-pending.md` had a single name reference in the review cadence note. Removed.
+
+The scan after the pass returned zero results. The push is clean.
+
+**What this changed about the build:**
+Nothing functional. The app behavior is identical. The Keychain service name change means anyone who had previously entered keys under the old service identifier would need to re-enter them — but no one had, this is a fresh build.
+
+**What's still open:**
+- Design output — inspiration pass in progress
+- Loom walkthrough
+- Final submission to The Lyceum Skool community
+
+**Deadline:** Sunday May 24, 12:00 PM EST.
+
+---
+
 *Last updated: 2026-05-21 — auto-loop active every 20 min (job bb0408e2)*
 *Next: design output returns → implement into SwiftUI → Loom → submission*
