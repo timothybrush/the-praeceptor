@@ -47,3 +47,43 @@ targets:
           - UIInterfaceOrientationPortrait
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
+    preBuildScripts:
+      - name: SwiftLint
+        script: |
+          if which swiftlint > /dev/null; then
+            swiftlint --config "${SRCROOT}/../.swiftlint.yml" "${SRCROOT}/Praeceptor"
+          else
+            echo "warning: SwiftLint not installed. Run: brew install swiftlint"
+          fi
+
+  PraeceptorTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "18.0"
+    sources:
+      - PraeceptorTests
+    settings:
+      base:
+        BUNDLE_LOADER: $(TEST_HOST)
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/Praeceptor.app/Praeceptor
+        SWIFT_VERSION: 6.0
+        IPHONEOS_DEPLOYMENT_TARGET: 18.0
+        PRODUCT_BUNDLE_IDENTIFIER: com.praeceptor.tests
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: Praeceptor
+
+schemes:
+  Praeceptor:
+    build:
+      targets:
+        Praeceptor: all
+        PraeceptorTests: testing
+    run:
+      config: Debug
+    test:
+      targets:
+        - PraeceptorTests
+      config: Debug
+    archive:
+      config: Release

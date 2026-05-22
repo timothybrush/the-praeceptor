@@ -7,7 +7,6 @@ final class AudioRecorder: NSObject, ObservableObject {
     @Published var audioLevel: Float = 0
 
     private var recorder: AVAudioRecorder?
-    private var levelTimer: Timer?
     private let outputURL: URL
 
     override init() {
@@ -30,19 +29,18 @@ final class AudioRecorder: NSObject, ObservableObject {
         recorder?.record()
         isRecording = true
 
-        levelTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in
-            Task { @MainActor in
+        Task { @MainActor [weak self] in
+            while self?.isRecording == true {
                 self?.updateLevel()
+                try? await Task.sleep(for: .milliseconds(50))
             }
         }
     }
 
     func stop() -> URL? {
-        levelTimer?.invalidate()
-        levelTimer = nil
+        isRecording = false
         recorder?.stop()
         recorder = nil
-        isRecording = false
         audioLevel = 0
         return outputURL
     }
@@ -50,7 +48,6 @@ final class AudioRecorder: NSObject, ObservableObject {
     private func updateLevel() {
         recorder?.updateMeters()
         let db = recorder?.averagePower(forChannel: 0) ?? -160
-        // Normalize -60dB..0dB → 0..1
         let normalized = max(0, min(1, (db + 60) / 60))
         audioLevel = normalized
     }

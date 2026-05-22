@@ -2,9 +2,11 @@ import Foundation
 
 struct WhisperService {
     private let apiKey: String
+    let session: URLSession
 
-    init(apiKey: String) {
+    init(apiKey: String, session: URLSession? = nil) {
         self.apiKey = apiKey
+        self.session = session ?? NetworkSession.make(requestTimeout: 30, resourceTimeout: 120)
     }
 
     func transcribe(audioURL: URL) async throws -> String {
@@ -30,10 +32,13 @@ struct WhisperService {
         body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
         request.httpBody = body
 
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let (data, response) = try await session.data(for: request)
 
-        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-            throw TranscriptionError.apiError(String(data: data, encoding: .utf8) ?? "Unknown error")
+        guard let http = response as? HTTPURLResponse else {
+            throw TranscriptionError.apiError("No response received.")
+        }
+        guard http.statusCode == 200 else {
+            throw TranscriptionError.httpError(http.statusCode)
         }
 
         let result = try JSONDecoder().decode(WhisperResponse.self, from: data)
@@ -43,11 +48,21 @@ struct WhisperService {
     enum TranscriptionError: Error, LocalizedError {
         case emptyAudio
         case apiError(String)
+        case httpError(Int)
 
         var errorDescription: String? {
             switch self {
-            case .emptyAudio: return "No audio was recorded."
-            case .apiError(let msg): return "Whisper API error: \(msg)"
+            case .emptyAudio:
+                return "No audio recorded. Hold the button and speak."
+            case .apiError(let msg):
+                return "Transcription error: \(msg)"
+            case .httpError(let code):
+                switch code {
+                case 401: return "OpenAI API key is invalid. Check Settings."
+                case 429: return "Transcription rate limit reached. Please wait a moment."
+                case 500, 503: return "OpenAI service is temporarily unavailable."
+                default: return "Transcription failed (error \(code)). Please try again."
+                }
             }
         }
     }

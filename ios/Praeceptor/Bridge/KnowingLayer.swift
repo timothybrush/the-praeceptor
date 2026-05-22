@@ -34,7 +34,8 @@ final class KnowingLayerBridge: ObservableObject {
         knowingLayer = layer
         guard let url = fileURL,
               let data = try? JSONEncoder().encode(layer) else { return }
-        try? data.write(to: url, options: .atomic)
+        // .completeFileProtection encrypts the file when the device is locked
+        try? data.write(to: url, options: [.atomic, .completeFileProtection])
     }
 
     func reset() {

@@ -11,10 +11,11 @@ final class SessionViewModel: ObservableObject {
     private let recorder = AudioRecorder()
     private let player = AudioPlayer()
 
-    // Injected after creation via configure()
     private var claudeService: ClaudeService?
     private var whisperService: WhisperService?
     private var ttsService: TTSService?
+
+    private var interruptionObserver: Task<Void, Never>?
 
     func configure(apiKeyManager: APIKeyManager) {
         guard let claudeKey = apiKeyManager.claudeKey,
@@ -22,6 +23,45 @@ final class SessionViewModel: ObservableObject {
         claudeService = ClaudeService(apiKey: claudeKey)
         whisperService = WhisperService(apiKey: openAIKey)
         ttsService = TTSService(apiKey: openAIKey)
+        startInterruptionObserver()
+    }
+
+    // MARK: — Audio Session Interruptions
+
+    private func startInterruptionObserver() {
+        interruptionObserver?.cancel()
+        interruptionObserver = Task { @MainActor [weak self] in
+            let notifications = NotificationCenter.default.notifications(
+                named: AVAudioSession.interruptionNotification
+            )
+            for await notification in notifications {
+                self?.handleInterruption(notification)
+            }
+        }
+    }
+
+    private func handleInterruption(_ notification: Notification) {
+        guard let info = notification.userInfo,
+              let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue) else { return }
+
+        switch type {
+        case .began:
+            switch phase {
+            case .recording:
+                _ = recorder.stop()
+                phase = .idle
+            case .speaking:
+                player.stop()
+                phase = .idle
+            default:
+                break
+            }
+        case .ended:
+            try? AVAudioSession.sharedInstance().setActive(true)
+        @unknown default:
+            break
+        }
     }
 
     // MARK: — Voice Pipeline
@@ -31,22 +71,27 @@ final class SessionViewModel: ObservableObject {
         Task {
             let granted = await AVAudioApplication.requestRecordPermission()
             guard granted else {
-                phase = .error("Microphone access is required. Please enable it in Settings.")
+                phase = .error("Microphone access required. Enable it in Settings → Privacy → Microphone.")
                 return
             }
             do {
                 try recorder.start()
                 phase = .recording
+                // Mirror audio level from recorder into viewModel
+                Task { @MainActor [weak self] in
+                    while self?.phase == .recording {
+                        self?.audioLevel = self?.recorder.audioLevel ?? 0
+                        try? await Task.sleep(for: .milliseconds(50))
+                    }
+                    self?.audioLevel = 0
+                }
             } catch {
                 phase = .error(error.localizedDescription)
             }
         }
     }
 
-    func stopRecording(
-        sessionStore: SessionStore,
-        knowingLayer: KnowingLayer?
-    ) {
+    func stopRecording(sessionStore: SessionStore, knowingLayer: KnowingLayer?) {
         guard phase == .recording else { return }
         guard let audioURL = recorder.stop() else { phase = .idle; return }
         Task {
@@ -62,7 +107,7 @@ final class SessionViewModel: ObservableObject {
         guard let whisper = whisperService,
               let claude = claudeService,
               let tts = ttsService else {
-            phase = .error("Services not configured — check API keys.")
+            phase = .error("Services not configured — check API keys in Settings.")
             return
         }
 
@@ -75,6 +120,7 @@ final class SessionViewModel: ObservableObject {
             phase = .error(error.localizedDescription)
             return
         }
+
         guard !transcript.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             phase = .idle
             return
@@ -82,7 +128,7 @@ final class SessionViewModel: ObservableObject {
 
         sessionStore.appendMessage(ChatMessage(role: .user, content: transcript, timestamp: Date()))
 
-        // 2. Claude
+        // 2. Stream Claude response
         phase = .thinking
         streamingText = ""
 
@@ -103,6 +149,11 @@ final class SessionViewModel: ObservableObject {
             }
         } catch {
             phase = .error(error.localizedDescription)
+            return
+        }
+
+        guard !fullResponse.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            phase = .error("No response received. Please try again.")
             return
         }
 

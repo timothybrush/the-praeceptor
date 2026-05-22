@@ -4,9 +4,11 @@ struct ClaudeService: Sendable {
     private let apiKey: String
     private let model = "claude-sonnet-4-6"
     private let maxTokens = 2048
+    let session: URLSession
 
-    init(apiKey: String) {
+    init(apiKey: String, session: URLSession? = nil) {
         self.apiKey = apiKey
+        self.session = session ?? NetworkSession.make(requestTimeout: 10, resourceTimeout: 120)
     }
 
     func stream(
@@ -32,19 +34,20 @@ struct ClaudeService: Sendable {
                     ]
                     request.httpBody = try JSONSerialization.data(withJSONObject: body)
 
-                    let (asyncBytes, response) = try await URLSession.shared.bytes(for: request)
+                    let (asyncBytes, response) = try await session.bytes(for: request)
 
-                    guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
-                        continuation.finish(throwing: ClaudeError.httpError(
-                            (response as? HTTPURLResponse)?.statusCode ?? 0
-                        ))
+                    guard let http = response as? HTTPURLResponse else {
+                        continuation.finish(throwing: ClaudeError.httpError(0))
+                        return
+                    }
+                    guard http.statusCode == 200 else {
+                        continuation.finish(throwing: ClaudeError.httpError(http.statusCode))
                         return
                     }
 
                     for try await line in asyncBytes.lines {
                         guard line.hasPrefix("data: ") else { continue }
                         let jsonStr = String(line.dropFirst(6))
-                        guard jsonStr != "[DONE]" else { break }
 
                         if let data = jsonStr.data(using: .utf8),
                            let event = try? JSONDecoder().decode(StreamEvent.self, from: data),
@@ -61,8 +64,21 @@ struct ClaudeService: Sendable {
         }
     }
 
-    enum ClaudeError: Error {
+    enum ClaudeError: Error, LocalizedError {
         case httpError(Int)
+
+        var errorDescription: String? {
+            switch self {
+            case .httpError(let code):
+                switch code {
+                case 401: return "Claude API key is invalid. Check Settings."
+                case 429: return "Claude rate limit reached. Please wait a moment."
+                case 529: return "Claude is overloaded. Please try again shortly."
+                case 500, 503: return "Claude service is temporarily unavailable."
+                default: return "Claude error (\(code)). Please try again."
+                }
+            }
+        }
     }
 
     private struct StreamEvent: Decodable {

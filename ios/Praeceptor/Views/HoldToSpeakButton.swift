@@ -8,6 +8,7 @@ struct HoldToSpeakButton: View {
     let onRelease: () -> Void
 
     @State private var isPressed = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var isRecording: Bool {
         if case .recording = phase { return true }
@@ -29,32 +30,27 @@ struct HoldToSpeakButton: View {
     var buttonColor: Color {
         if isRecording { return theme.holdButtonActive }
         if isProcessing { return theme.accent.opacity(0.6) }
-        if isSpeaking { return theme.accent.opacity(0.4) }
         return theme.holdButtonIdle
-    }
-
-    var pulseScale: CGFloat {
-        isRecording ? 1.0 + CGFloat(audioLevel) * 0.3 : 1.0
     }
 
     var body: some View {
         ZStack {
-            // Pulse ring when recording
-            if isRecording {
+            if isRecording && !reduceMotion {
                 Circle()
                     .stroke(theme.accent.opacity(0.3), lineWidth: 2)
-                    .frame(width: 120 + CGFloat(audioLevel) * 40, height: 120 + CGFloat(audioLevel) * 40)
+                    .frame(
+                        width: 120 + CGFloat(audioLevel) * 40,
+                        height: 120 + CGFloat(audioLevel) * 40
+                    )
                     .animation(.easeOut(duration: 0.05), value: audioLevel)
             }
 
-            // Main button
             Circle()
                 .fill(buttonColor)
                 .frame(width: 100, height: 100)
                 .scaleEffect(isPressed ? 0.95 : 1.0)
                 .animation(.spring(response: 0.2), value: isPressed)
 
-            // Icon
             buttonIcon
         }
         .gesture(
@@ -73,6 +69,9 @@ struct HoldToSpeakButton: View {
                 }
         )
         .disabled(isProcessing)
+        .accessibilityLabel(accessibilityLabel)
+        .accessibilityHint(phase == .idle ? "Double tap and hold to speak. Release to send." : "")
+        .accessibilityAddTraits(isProcessing ? .updatesFrequently : [])
     }
 
     @ViewBuilder
@@ -85,14 +84,21 @@ struct HoldToSpeakButton: View {
             ProgressView()
                 .tint(.white)
                 .scaleEffect(1.2)
-        } else if isSpeaking {
-            Image(systemName: "speaker.wave.2.fill")
-                .font(.system(size: 26, weight: .medium))
-                .foregroundColor(.white)
         } else {
             Image(systemName: "mic.fill")
                 .font(.system(size: 28, weight: .medium))
                 .foregroundColor(.white)
+        }
+    }
+
+    private var accessibilityLabel: Text {
+        switch phase {
+        case .idle: return Text("Speak to The Praeceptor")
+        case .recording: return Text("Recording. Release to send.")
+        case .transcribing: return Text("Transcribing your message")
+        case .thinking: return Text("The Praeceptor is thinking")
+        case .speaking: return Text("The Praeceptor is speaking")
+        case .error: return Text("Error occurred")
         }
     }
 }
