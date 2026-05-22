@@ -2,6 +2,7 @@ import SwiftUI
 
 struct RootView: View {
     @EnvironmentObject var sessionStore: SessionStore
+    @EnvironmentObject var launchState: LaunchState
     @StateObject private var apiKeyManager = APIKeyManager()
 
     var body: some View {
@@ -14,6 +15,7 @@ struct RootView: View {
             } else {
                 SessionView()
                     .environmentObject(sessionStore)
+                    .environmentObject(launchState)
             }
         }
         .environmentObject(apiKeyManager)

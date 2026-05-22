@@ -10,11 +10,14 @@
 		07D60DA8BCC4F82DC07C2E3A /* NetworkSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6ACFF4D4074154E90BE378 /* NetworkSession.swift */; };
 		10DA3AF2D4679BCD08D337A2 /* WhisperServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1298BD403F4E48674B514FD5 /* WhisperServiceTests.swift */; };
 		1DBA7AE431CF7300CBAD9C41 /* HoldToSpeakButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0100F35A6A553738DBF2F0DE /* HoldToSpeakButton.swift */; };
+		220694D7DF8472A86BB84E19 /* PraeceptorWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463CCAFDEC51706A6B3846BE /* PraeceptorWidget.swift */; };
 		28EB43E0C7266D8BDC9780F9 /* TTSServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B49A73B65EC59B0A05B940 /* TTSServiceTests.swift */; };
 		316CA1C2EFEB5FCC32A667B0 /* KnowingLayerModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD0C95B3E915B530914708D /* KnowingLayerModelTests.swift */; };
 		3354008598EA8446D6DF1EC6 /* APIKeyManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E79B87E258D2B214B0B466D /* APIKeyManagerTests.swift */; };
 		3AF6C602DC86A13E50FC9472 /* TestFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436E32C723712FF11AD6B920 /* TestFixtures.swift */; };
 		3E80C07318F3365FEB5799AF /* SystemPromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8386C6D2E102FB09B4FAD87D /* SystemPromptBuilder.swift */; };
+		498E96D7552EFE676AE558DF /* PraeceptorLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5C6C34A94C97CC8D5140FD0 /* PraeceptorLiveActivity.swift */; };
+		4A0A9FB21C87767A012C2393 /* LiveActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19795BCB420665D4E16BBA0E /* LiveActivityManager.swift */; };
 		4CF2F8A1499B146C71CD136C /* TTSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B2406596FB7620EDA95862D /* TTSService.swift */; };
 		551EBCBAF02D60237FDE4D9F /* KnowingLayerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119315E05981EE7F9AFB02B2 /* KnowingLayerModel.swift */; };
 		553E0A2C46FA8EFE8A7AB0E8 /* WhisperService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8948A142D027D832CD0B9370 /* WhisperService.swift */; };
@@ -22,9 +25,14 @@
 		5E6F8386A29B335CFB5BC5BD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB70D8D8DFFA3C70E0AA1FB /* ContentView.swift */; };
 		644E5B2DAB3B423F102E388F /* PraeceptorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5839BC94A6AEE53DBB061706 /* PraeceptorApp.swift */; };
 		70BD510F7F81E9790DACBFD3 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAB85F78D78A948A77555890 /* Session.swift */; };
+		7851584644707CB3E91AE548 /* PraeceptorActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B73F993888E07B2A2F9E3AB /* PraeceptorActivityAttributes.swift */; };
 		7B3E5BA40FABDEAE6502D56A /* ClaudeServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A73BE1832321914E96D17C6 /* ClaudeServiceTests.swift */; };
+		89E35610327D2A65183A1C8A /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F36DF415701758D29769562 /* NotificationManager.swift */; };
 		918CD0B5E7729392C38AAFD7 /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC162C241D9EF02A0956D9A1 /* SessionView.swift */; };
+		9320F2B1D64681DD438A2485 /* PraeceptorActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B73F993888E07B2A2F9E3AB /* PraeceptorActivityAttributes.swift */; };
+		996FECF7DAAD0D28D3365E1C /* PraeceptorWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C928237C6410D232C6416AA4 /* PraeceptorWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A22761AE476328EA8BB43830 /* SessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6EC06EC8B6C67786BAE8DD /* SessionViewModel.swift */; };
+		ABA3FF7D8A5D7868782FF046 /* LaunchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB32EAE267AC7CDE5162303 /* LaunchState.swift */; };
 		C57CEB41BFDDE27F130C0E41 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C27669154B9B64B44576E9 /* AudioRecorder.swift */; };
 		CA8689AF72E3E2BF30827C69 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DA5F2F3A099F151AA3CF67 /* SettingsView.swift */; };
 		CD443276C5CF7EC8BF2893BE /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA8DDF073B53BBCCE9A1C57 /* AudioPlayer.swift */; };
@@ -35,6 +43,7 @@
 		E19246B192A5ECE49229B1FB /* SessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030C80810836FACED2D0BDF2 /* SessionStore.swift */; };
 		E35D3F9E34B66E225A4182AA /* ClaudeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538A19AEA909BD1A4198628A /* ClaudeService.swift */; };
 		E451E5068BF106198370E9E1 /* MockURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15BF928D383D10DFC4C019D /* MockURLProtocol.swift */; };
+		FA270E76404E141EE239D8DA /* PraeceptorWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB18E2A905672A7485DDA4E /* PraeceptorWidgetBundle.swift */; };
 		FDEAAC0F5A532EBEB70707BC /* KnowingLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEB2A6B473886BDDF544941 /* KnowingLayer.swift */; };
 /* End PBXBuildFile section */
 
@@ -46,29 +55,56 @@
 			remoteGlobalIDString = 316085E51AA547120223ED4D;
 			remoteInfo = Praeceptor;
 		};
+		EB5B36A4197C65DC88014405 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 309A4FA066048E9A348BC290 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AF4150FDA73287E8CC04DE43;
+			remoteInfo = PraeceptorWidget;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		1FBE92BF6936B1D9CDB73E57 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				996FECF7DAAD0D28D3365E1C /* PraeceptorWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0100F35A6A553738DBF2F0DE /* HoldToSpeakButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoldToSpeakButton.swift; sourceTree = "<group>"; };
 		030C80810836FACED2D0BDF2 /* SessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionStore.swift; sourceTree = "<group>"; };
 		119315E05981EE7F9AFB02B2 /* KnowingLayerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnowingLayerModel.swift; sourceTree = "<group>"; };
 		1298BD403F4E48674B514FD5 /* WhisperServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhisperServiceTests.swift; sourceTree = "<group>"; };
+		19795BCB420665D4E16BBA0E /* LiveActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityManager.swift; sourceTree = "<group>"; };
 		1A36E7212CC957609D377707 /* TimeOfDayTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeOfDayTheme.swift; sourceTree = "<group>"; };
 		1B2406596FB7620EDA95862D /* TTSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSService.swift; sourceTree = "<group>"; };
 		21FE0F3382ECB02F99FFE907 /* Praeceptor.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Praeceptor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33B49A73B65EC59B0A05B940 /* TTSServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSServiceTests.swift; sourceTree = "<group>"; };
 		436E32C723712FF11AD6B920 /* TestFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestFixtures.swift; sourceTree = "<group>"; };
+		463CCAFDEC51706A6B3846BE /* PraeceptorWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PraeceptorWidget.swift; sourceTree = "<group>"; };
 		4A73BE1832321914E96D17C6 /* ClaudeServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeServiceTests.swift; sourceTree = "<group>"; };
 		4AD0C95B3E915B530914708D /* KnowingLayerModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnowingLayerModelTests.swift; sourceTree = "<group>"; };
+		4B73F993888E07B2A2F9E3AB /* PraeceptorActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PraeceptorActivityAttributes.swift; sourceTree = "<group>"; };
 		538A19AEA909BD1A4198628A /* ClaudeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeService.swift; sourceTree = "<group>"; };
 		5839BC94A6AEE53DBB061706 /* PraeceptorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PraeceptorApp.swift; sourceTree = "<group>"; };
+		6186F95DAD935A9C83108FD7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		6E79B87E258D2B214B0B466D /* APIKeyManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeyManagerTests.swift; sourceTree = "<group>"; };
 		7AB70D8D8DFFA3C70E0AA1FB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		7F36DF415701758D29769562 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		8386C6D2E102FB09B4FAD87D /* SystemPromptBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemPromptBuilder.swift; sourceTree = "<group>"; };
 		85DA5F2F3A099F151AA3CF67 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		8948A142D027D832CD0B9370 /* WhisperService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhisperService.swift; sourceTree = "<group>"; };
 		8B6EC06EC8B6C67786BAE8DD /* SessionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionViewModel.swift; sourceTree = "<group>"; };
 		9DA8DDF073B53BBCCE9A1C57 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
+		9FB32EAE267AC7CDE5162303 /* LaunchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchState.swift; sourceTree = "<group>"; };
 		A2F78F86EFCB05B7A523617F /* PraeceptorTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PraeceptorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC162C241D9EF02A0956D9A1 /* SessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionView.swift; sourceTree = "<group>"; };
 		AC6ACFF4D4074154E90BE378 /* NetworkSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSession.swift; sourceTree = "<group>"; };
@@ -76,9 +112,12 @@
 		B7C27669154B9B64B44576E9 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
 		BA80A7A331186682DD0FED41 /* SessionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionViewModelTests.swift; sourceTree = "<group>"; };
 		BAB85F78D78A948A77555890 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		BBB18E2A905672A7485DDA4E /* PraeceptorWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PraeceptorWidgetBundle.swift; sourceTree = "<group>"; };
 		BEEB2A6B473886BDDF544941 /* KnowingLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnowingLayer.swift; sourceTree = "<group>"; };
+		C928237C6410D232C6416AA4 /* PraeceptorWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = PraeceptorWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D15BF928D383D10DFC4C019D /* MockURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLProtocol.swift; sourceTree = "<group>"; };
 		E677E475170D5407D843E5B0 /* SystemPromptBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemPromptBuilderTests.swift; sourceTree = "<group>"; };
+		F5C6C34A94C97CC8D5140FD0 /* PraeceptorLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PraeceptorLiveActivity.swift; sourceTree = "<group>"; };
 		F9DE2CBBD63BF186EAE6317C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FF91739E4175C13E7DEDABB5 /* IntakeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntakeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -97,6 +136,7 @@
 			children = (
 				21FE0F3382ECB02F99FFE907 /* Praeceptor.app */,
 				A2F78F86EFCB05B7A523617F /* PraeceptorTests.xctest */,
+				C928237C6410D232C6416AA4 /* PraeceptorWidget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -135,6 +175,8 @@
 			children = (
 				6B430426505125941FB05906 /* Praeceptor */,
 				9DACA8B0B964F9F8CFF0A918 /* PraeceptorTests */,
+				794A0761A96739C6850EE476 /* PraeceptorWidget */,
+				D2604AE8BB40235637B94561 /* Shared */,
 				0D81FF88C4344E0F79F70116 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -165,9 +207,23 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		794A0761A96739C6850EE476 /* PraeceptorWidget */ = {
+			isa = PBXGroup;
+			children = (
+				6186F95DAD935A9C83108FD7 /* Info.plist */,
+				F5C6C34A94C97CC8D5140FD0 /* PraeceptorLiveActivity.swift */,
+				463CCAFDEC51706A6B3846BE /* PraeceptorWidget.swift */,
+				BBB18E2A905672A7485DDA4E /* PraeceptorWidgetBundle.swift */,
+			);
+			path = PraeceptorWidget;
+			sourceTree = "<group>";
+		};
 		7E0B66CB63BAA5C74ED99F1B /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				9FB32EAE267AC7CDE5162303 /* LaunchState.swift */,
+				19795BCB420665D4E16BBA0E /* LiveActivityManager.swift */,
+				7F36DF415701758D29769562 /* NotificationManager.swift */,
 				030C80810836FACED2D0BDF2 /* SessionStore.swift */,
 				8B6EC06EC8B6C67786BAE8DD /* SessionViewModel.swift */,
 			);
@@ -216,6 +272,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		D2604AE8BB40235637B94561 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				4B73F993888E07B2A2F9E3AB /* PraeceptorActivityAttributes.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
 		EA2BA4E9944D93B024CF453B /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -251,10 +315,12 @@
 			buildPhases = (
 				84072CD9206BC4117F806019 /* SwiftLint */,
 				BD763B9DDE78BB9CF84794F8 /* Sources */,
+				1FBE92BF6936B1D9CDB73E57 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				7E07059B3F622CEF6F2D3E8B /* PBXTargetDependency */,
 			);
 			name = Praeceptor;
 			packageProductDependencies = (
@@ -262,6 +328,23 @@
 			productName = Praeceptor;
 			productReference = 21FE0F3382ECB02F99FFE907 /* Praeceptor.app */;
 			productType = "com.apple.product-type.application";
+		};
+		AF4150FDA73287E8CC04DE43 /* PraeceptorWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 023B01EC503360DFBEBDE8C1 /* Build configuration list for PBXNativeTarget "PraeceptorWidget" */;
+			buildPhases = (
+				FBDB1D1DCB2FA7578ABDEDBA /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PraeceptorWidget;
+			packageProductDependencies = (
+			);
+			productName = PraeceptorWidget;
+			productReference = C928237C6410D232C6416AA4 /* PraeceptorWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		D42173735E6A61980954F5D6 /* PraeceptorTests */ = {
 			isa = PBXNativeTarget;
@@ -294,6 +377,10 @@
 						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
+					AF4150FDA73287E8CC04DE43 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Manual;
+					};
 					D42173735E6A61980954F5D6 = {
 						DevelopmentTeam = "";
 					};
@@ -315,6 +402,7 @@
 			targets = (
 				316085E51AA547120223ED4D /* Praeceptor */,
 				D42173735E6A61980954F5D6 /* PraeceptorTests */,
+				AF4150FDA73287E8CC04DE43 /* PraeceptorWidget */,
 			);
 		};
 /* End PBXProject section */
@@ -354,7 +442,11 @@
 				D230B163320353B5BD0D4849 /* IntakeView.swift in Sources */,
 				FDEAAC0F5A532EBEB70707BC /* KnowingLayer.swift in Sources */,
 				551EBCBAF02D60237FDE4D9F /* KnowingLayerModel.swift in Sources */,
+				ABA3FF7D8A5D7868782FF046 /* LaunchState.swift in Sources */,
+				4A0A9FB21C87767A012C2393 /* LiveActivityManager.swift in Sources */,
 				07D60DA8BCC4F82DC07C2E3A /* NetworkSession.swift in Sources */,
+				89E35610327D2A65183A1C8A /* NotificationManager.swift in Sources */,
+				7851584644707CB3E91AE548 /* PraeceptorActivityAttributes.swift in Sources */,
 				644E5B2DAB3B423F102E388F /* PraeceptorApp.swift in Sources */,
 				70BD510F7F81E9790DACBFD3 /* Session.swift in Sources */,
 				E19246B192A5ECE49229B1FB /* SessionStore.swift in Sources */,
@@ -384,9 +476,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FBDB1D1DCB2FA7578ABDEDBA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9320F2B1D64681DD438A2485 /* PraeceptorActivityAttributes.swift in Sources */,
+				498E96D7552EFE676AE558DF /* PraeceptorLiveActivity.swift in Sources */,
+				220694D7DF8472A86BB84E19 /* PraeceptorWidget.swift in Sources */,
+				FA270E76404E141EE239D8DA /* PraeceptorWidgetBundle.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		7E07059B3F622CEF6F2D3E8B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AF4150FDA73287E8CC04DE43 /* PraeceptorWidget */;
+			targetProxy = EB5B36A4197C65DC88014405 /* PBXContainerItemProxy */;
+		};
 		83A39668442A2F9A46C67000 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 316085E51AA547120223ED4D /* Praeceptor */;
@@ -562,6 +670,29 @@
 			};
 			name = Release;
 		};
+		A4AEFCF53A3FAB0FCB89C86F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = PraeceptorWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.praeceptor.praeceptor.widget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		BB93082F5E5BFF0CA6AAC0E1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -600,9 +731,41 @@
 			};
 			name = Debug;
 		};
+		EE085552E8BA494BBAA209EC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = PraeceptorWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.praeceptor.praeceptor.widget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		023B01EC503360DFBEBDE8C1 /* Build configuration list for PBXNativeTarget "PraeceptorWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A4AEFCF53A3FAB0FCB89C86F /* Debug */,
+				EE085552E8BA494BBAA209EC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		52C0947EB937C8BF369BEBC0 /* Build configuration list for PBXProject "Praeceptor" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

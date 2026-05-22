@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @ObservedObject var apiKeyManager: APIKeyManager
+    @EnvironmentObject var notificationManager: NotificationManager
     @Environment(\.dismiss) private var dismiss
 
     @State private var claudeKey: String = ""
@@ -39,6 +40,27 @@ struct SettingsView: View {
                     Text("ElevenLabs (Premium Voice)")
                 } footer: {
                     Text("Optional. Enables premium voice output. Leave blank to use OpenAI TTS.")
+                }
+
+                Section {
+                    ForEach(SessionReminder.allCases, id: \.rawValue) { reminder in
+                        Toggle(isOn: Binding(
+                            get: { notificationManager.isEnabled(reminder) },
+                            set: { _ in Task { await notificationManager.toggle(reminder) } }
+                        )) {
+                            HStack {
+                                Text(reminder.label)
+                                Spacer()
+                                Text(reminder.subtitle)
+                                    .font(.system(size: 13))
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                    }
+                } header: {
+                    Text("Session Reminders")
+                } footer: {
+                    Text("Opt in to any. He doesn't chase.")
                 }
 
                 Section {

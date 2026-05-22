@@ -16,12 +16,27 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.praeceptor.praeceptor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>praeceptor</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>NSDocumentsFolderUsageDescription</key>
 	<string>Used to read context from iCloud.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>The Praeceptor listens to your voice so you can speak directly into the session.</string>
+	<key>NSSupportsLiveActivities</key>
+	<true/>
+	<key>NSSupportsLiveActivitiesFrequentUpdates</key>
+	<true/>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

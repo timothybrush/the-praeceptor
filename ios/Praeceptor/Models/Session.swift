@@ -1,12 +1,19 @@
 import Foundation
 
-struct ChatMessage: Identifiable, Equatable {
-    let id = UUID()
+struct ChatMessage: Identifiable, Equatable, Codable {
+    let id: UUID
     let role: Role
     let content: String
     let timestamp: Date
 
-    enum Role: String {
+    init(role: Role, content: String, timestamp: Date) {
+        self.id = UUID()
+        self.role = role
+        self.content = content
+        self.timestamp = timestamp
+    }
+
+    enum Role: String, Codable {
         case user, assistant
     }
 }
@@ -31,6 +38,14 @@ enum TimeOfDay {
         case 5..<12: return .morning
         case 12..<17: return .noon
         default: return .night
+        }
+    }
+
+    var label: String {
+        switch self {
+        case .morning: return "Morning session"
+        case .noon:    return "Midday session"
+        case .night:   return "Evening session"
         }
     }
 

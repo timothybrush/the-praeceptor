@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 import AVFoundation
+import UIKit
 
 @MainActor
 final class SessionViewModel: ObservableObject {
@@ -10,6 +11,7 @@ final class SessionViewModel: ObservableObject {
 
     private let recorder = AudioRecorder()
     private let player = AudioPlayer()
+    private let liveActivity = LiveActivityManager()
 
     private var claudeService: ClaudeService?
     private var whisperService: WhisperService?
@@ -50,9 +52,11 @@ final class SessionViewModel: ObservableObject {
             switch phase {
             case .recording:
                 _ = recorder.stop()
+                liveActivity.endActivity()
                 phase = .idle
             case .speaking:
                 player.stop()
+                liveActivity.endActivity()
                 phase = .idle
             default:
                 break
@@ -71,12 +75,13 @@ final class SessionViewModel: ObservableObject {
         Task {
             let granted = await AVAudioApplication.requestRecordPermission()
             guard granted else {
-                phase = .error("Microphone access required. Enable it in Settings → Privacy → Microphone.")
+                setError("Microphone access required. Enable it in Settings → Privacy → Microphone.")
                 return
             }
             do {
                 try recorder.start()
                 phase = .recording
+                liveActivity.startActivity(sessionLabel: TimeOfDay.current.label)
                 // Mirror audio level from recorder into viewModel
                 Task { @MainActor [weak self] in
                     while self?.phase == .recording {
@@ -86,7 +91,7 @@ final class SessionViewModel: ObservableObject {
                     self?.audioLevel = 0
                 }
             } catch {
-                phase = .error(error.localizedDescription)
+                setError(error.localizedDescription)
             }
         }
     }
@@ -107,17 +112,18 @@ final class SessionViewModel: ObservableObject {
         guard let whisper = whisperService,
               let claude = claudeService,
               let tts = ttsService else {
-            phase = .error("Services not configured — check API keys in Settings.")
+            setError("Services not configured — check API keys in Settings.")
             return
         }
 
         // 1. Transcribe
         phase = .transcribing
+        liveActivity.updateActivity(phase: .transcribing)
         let transcript: String
         do {
             transcript = try await whisper.transcribe(audioURL: audioURL)
         } catch {
-            phase = .error(error.localizedDescription)
+            setError(error.localizedDescription)
             return
         }
 
@@ -130,6 +136,7 @@ final class SessionViewModel: ObservableObject {
 
         // 2. Stream Claude response
         phase = .thinking
+        liveActivity.updateActivity(phase: .thinking)
         streamingText = ""
 
         let systemPrompt = SystemPromptBuilder.build(
@@ -148,12 +155,12 @@ final class SessionViewModel: ObservableObject {
                 streamingText = fullResponse
             }
         } catch {
-            phase = .error(error.localizedDescription)
+            setError(error.localizedDescription)
             return
         }
 
         guard !fullResponse.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            phase = .error("No response received. Please try again.")
+            setError("No response received. Please try again.")
             return
         }
 
@@ -162,22 +169,34 @@ final class SessionViewModel: ObservableObject {
 
         // 3. TTS + Playback
         phase = .speaking
+        liveActivity.updateActivity(phase: .speaking)
         do {
             let audioData = try await tts.synthesize(text: fullResponse, speed: TimeOfDay.current.ttsSpeed)
             try player.play(data: audioData) { [weak self] in
-                Task { @MainActor in self?.phase = .idle }
+                Task { @MainActor in
+                    self?.liveActivity.endActivity()
+                    UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                    self?.phase = .idle
+                }
             }
         } catch {
-            phase = .error(error.localizedDescription)
+            setError(error.localizedDescription)
         }
     }
 
     func stopPlayback() {
         player.stop()
+        liveActivity.endActivity()
         phase = .idle
     }
 
     func dismissError() {
         phase = .idle
+    }
+
+    private func setError(_ message: String) {
+        liveActivity.endActivity()
+        UINotificationFeedbackGenerator().notificationOccurred(.error)
+        phase = .error(message)
     }
 }

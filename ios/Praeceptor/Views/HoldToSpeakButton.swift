@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct HoldToSpeakButton: View {
     let phase: SessionPhase
@@ -58,12 +59,14 @@ struct HoldToSpeakButton: View {
                 .onChanged { _ in
                     if !isPressed && phase == .idle {
                         isPressed = true
+                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                         onHold()
                     }
                 }
                 .onEnded { _ in
                     if isPressed {
                         isPressed = false
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
                         onRelease()
                     }
                 }

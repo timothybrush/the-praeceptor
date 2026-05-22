@@ -35,6 +35,20 @@
                ReferencedContainer = "container:Praeceptor.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AF4150FDA73287E8CC04DE43"
+               BuildableName = "PraeceptorWidget.appex"
+               BlueprintName = "PraeceptorWidget"
+               ReferencedContainer = "container:Praeceptor.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

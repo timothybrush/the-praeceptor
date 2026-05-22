@@ -3,6 +3,7 @@ import SwiftUI
 struct SessionView: View {
     @EnvironmentObject var sessionStore: SessionStore
     @EnvironmentObject var apiKeyManager: APIKeyManager
+    @EnvironmentObject var launchState: LaunchState
     @StateObject private var viewModel = SessionViewModel()
     @State private var showingSettings = false
 
@@ -27,6 +28,15 @@ struct SessionView: View {
         }
         .task {
             viewModel.configure(apiKeyManager: apiKeyManager)
+            if launchState.startRecording {
+                launchState.startRecording = false
+                viewModel.startRecording()
+            }
+        }
+        .onChange(of: launchState.startRecording) { _, shouldStart in
+            guard shouldStart else { return }
+            launchState.startRecording = false
+            viewModel.startRecording()
         }
         .sheet(isPresented: $showingSettings) {
             SettingsView(apiKeyManager: apiKeyManager)
@@ -173,13 +183,7 @@ struct SessionView: View {
         }
     }
 
-    private var sessionLabel: String {
-        switch TimeOfDay.current {
-        case .morning: return "Morning session"
-        case .noon: return "Midday session"
-        case .night: return "Evening session"
-        }
-    }
+    private var sessionLabel: String { TimeOfDay.current.label }
 
     private var errorBinding: Binding<Bool> {
         Binding(

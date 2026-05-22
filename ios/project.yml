@@ -20,6 +20,7 @@ targets:
     deploymentTarget: "18.0"
     sources:
       - Praeceptor
+      - Shared
     resources:
       - Praeceptor/Resources
     settings:
@@ -39,6 +40,12 @@ targets:
         CFBundleVersion: "1"
         NSMicrophoneUsageDescription: "The Praeceptor listens to your voice so you can speak directly into the session."
         NSDocumentsFolderUsageDescription: "Used to read context from iCloud."
+        NSSupportsLiveActivities: YES
+        NSSupportsLiveActivitiesFrequentUpdates: YES
+        CFBundleURLTypes:
+          - CFBundleURLSchemes:
+              - praeceptor
+            CFBundleURLName: com.praeceptor.praeceptor
         UILaunchScreen:
           UIColorName: ""
         UIRequiredDeviceCapabilities:
@@ -47,6 +54,9 @@ targets:
           - UIInterfaceOrientationPortrait
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
+    dependencies:
+      - target: PraeceptorWidget
+        embed: true
     preBuildScripts:
       - name: SwiftLint
         script: |
@@ -55,6 +65,29 @@ targets:
           else
             echo "warning: SwiftLint not installed. Run: brew install swiftlint"
           fi
+
+  PraeceptorWidget:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "18.0"
+    sources:
+      - PraeceptorWidget
+      - Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.praeceptor.praeceptor.widget
+        SWIFT_VERSION: 6.0
+        SKIP_INSTALL: YES
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: ""
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGNING_ALLOWED: NO
+        DEVELOPMENT_TEAM: ""
+    info:
+      path: PraeceptorWidget/Info.plist
+      properties:
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
 
   PraeceptorTests:
     type: bundle.unit-test
@@ -78,6 +111,7 @@ schemes:
     build:
       targets:
         Praeceptor: all
+        PraeceptorWidget: all
         PraeceptorTests: testing
     run:
       config: Debug
