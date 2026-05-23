@@ -29,7 +29,9 @@ final class KnowingLayerUpdater {
             existingJSON = "{}"
         }
 
-        let transcript = session
+        // Last 20 messages — enough context without ballooning the Haiku call
+        let recentMessages = session.suffix(20)
+        let transcript = recentMessages
             .map { "\($0.role.rawValue): \($0.content)" }
             .joined(separator: "\n")
 
@@ -40,21 +42,37 @@ final class KnowingLayerUpdater {
         }()
 
         let userMessage = """
-        Session transcript:
+        Session transcript (most recent exchanges):
         \(transcript)
 
         Existing KNOWING layer JSON:
         \(existingJSON)
 
-        Today's date: \(today)
+        Today: \(today)
+        Mentor name: \(mentorName)
 
-        Return an updated KNOWING layer JSON. Rules:
-        - Preserve all person fields unless the session explicitly changes them
-        - Update currentState fields if new information surfaced
-        - Add a new SessionSummary entry for today to lastThreeSessions (keep at most 3, remove oldest)
-        - Update openTensions, thesisDrift, hisDirective, patternsHeSees, nextSessionIntent based on what surfaced
-        - Do NOT include the "updated" field
-        - Return ONLY valid JSON. No markdown fences, no explanation.
+        Update the KNOWING layer JSON. Apply these rules precisely:
+
+        person — preserve unless the session explicitly changes a field
+        currentState — update if new information surfaced
+        lastThreeSessions — add today's entry, remove oldest if already 3 (max 3)
+        openTensions — max 3; not observations — unresolved things that actually matter
+        thesisDrift — MOST IMPORTANT FIELD: if original thesis and current state diverged, name it in one sentence; null if no drift
+        hisDirective — the specific thing \(mentorName) left with the user that hasn't been acknowledged; null if none
+        patternsHeSees — only from this exact list, only those confirmed visible in THIS session (max 3):
+          "Motion mistaken for momentum"
+          "Dispersal masquerading as optionality"
+          "Financial pressure rewriting the thesis"
+          "Performing the journey instead of doing the work"
+          "Mistaking learning for action"
+          "Gap between stated values and actual calendar"
+          "Lowering the bar quietly"
+        nextSessionIntent — one sentence: what \(mentorName) plans to open with or return to next time
+        supplementalContext — preserve as-is if present
+
+        Target: the full JSON must serialize to ≤800 tokens. Compress session summaries and field values if needed.
+        Do NOT include the "updated" field.
+        Return ONLY valid JSON. No markdown fences, no explanation.
         """
 
         guard let updated = await callHaiku(userMessage: userMessage) else { return }
@@ -69,7 +87,7 @@ final class KnowingLayerUpdater {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("2023-06-01", forHTTPHeaderField: "anthropic-version")
 
-        let systemPrompt = "You maintain a structured JSON context object for a voice mentor app. Return only valid JSON with no explanation or markdown formatting."
+        let systemPrompt = "You are writing session notes for a formed mentor. Record what he observed — not a neutral summary. What was the real tension? What did he leave with them? What pattern did he see? Return only valid JSON with no explanation or markdown."
 
         let body: [String: Any] = [
             "model": model,

@@ -86,6 +86,12 @@ struct KnowingLayer: Codable {
         if let directive = hisDirective {
             parts.append("His directive (unacknowledged): \(directive)")
         }
+        if !patternsHeSees.isEmpty {
+            parts.append("Patterns visible: \(patternsHeSees.joined(separator: "; "))")
+        }
+        if let intent = nextSessionIntent, !intent.isEmpty {
+            parts.append("Next session: \(intent)")
+        }
         if let supplemental = supplementalContext, !supplemental.isEmpty {
             parts.append("Additional context:\n\(supplemental)")
         }
