@@ -50,29 +50,47 @@ These are not diagnostic prompts. They are the questions of a man who has seen e
 
 ---
 
-## The Architecture
+## Repo Structure
 
 ```
-Character Layer (fixed — never compresses)
-├── identity.md         — composite, voice, perspective, seven blind spots
-├── rules.md            — always/never, output format, routing table
-├── voice/
-│   ├── signature-questions.md
-│   ├── blind-spots.md
-│   ├── failure-stories.md
-│   └── refusals.md
-└── examples.md         — BAD (mirror) vs GOOD (formed mentor)
+the-praeceptor/
+├── icm/                        ← Claude Project drop-in (the mentor character)
+│   ├── CLAUDE.md               — paste into Claude Project system instructions
+│   ├── identity.md             — composite, voice, perspective
+│   ├── rules.md                — always/never, output format, routing table
+│   ├── examples.md             — BAD (mirror) vs GOOD (formed mentor)
+│   ├── context-guidelines.md   — how to fill the KNOWING layer
+│   ├── voice/
+│   │   ├── signature-questions.md
+│   │   ├── blind-spots.md
+│   │   ├── failure-stories.md
+│   │   └── refusals.md
+│   ├── intake/
+│   │   ├── knowing-layer.md    — KNOWING layer template (fill per person)
+│   │   └── protocol.md         — first-session intake flow
+│   └── outputs/                — example sessions showing the mentor in action
+│
+└── ios/                        ← native iOS voice app (Swift 6 / SwiftUI / iOS 18+)
+    ├── Praeceptor/             — app source
+    ├── PraeceptorTests/        — 86 tests
+    └── PraeceptorWidget/       — home screen + lock screen widgets
+```
+
+**Two independent deliverables.** The `icm/` folder works in any Claude Project today — no app required. The `ios/` app is the native voice delivery mechanism. They share the same CHARACTER layer.
+
+**ICM architecture:**
+```
+CHARACTER (fixed — never compresses)
+└── identity.md · rules.md · voice/ · examples.md
 
 KNOWING Layer (variable — ≤800 tokens, per session)
-└── intake/knowing-layer.md   — person context, current state, open tensions
+└── intake/knowing-layer.md
+```
 
-iOS Application
-├── Voice pipeline (default): SFSpeechRecognizer → Claude → AVSpeechSynthesizer (on-device, no OpenAI needed)
-├── Voice pipeline (premium): Whisper API → Claude → OpenAI TTS onyx (requires OpenAI key)
-├── Extended thinking: Claude Sonnet 4.6 with 5000-token thinking budget
-├── Time-of-day modes: morning (amber/gold), noon (grey/blue), night (navy/earth)
-├── Intake flow: 7 questions → KNOWING layer (≤800 tokens, persists encrypted)
-└── KNOWING layer updates silently post-session via Claude Haiku
+**iOS voice pipeline:**
+```
+Default:  SFSpeechRecognizer → Claude Sonnet 4.6 → AVSpeechSynthesizer  (Claude key only)
+Premium:  Whisper API        → Claude Sonnet 4.6 → OpenAI TTS onyx      (+ OpenAI key)
 ```
 
 ---
@@ -117,5 +135,4 @@ The current app makes direct authenticated API calls from the device. A future h
 
 ---
 
-*Built for The Lyceum — Week 5 Competition · May 2026*
 *Folder + iOS app · Swift 6 · SwiftUI · iOS 18+ · Claude Sonnet 4.6 · Apple on-device voice (default) · OpenAI Whisper + TTS (optional)*
