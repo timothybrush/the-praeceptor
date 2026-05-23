@@ -62,6 +62,7 @@ targets:
         embed: true
     preBuildScripts:
       - name: SwiftLint
+        basedOnDependencyAnalysis: false
         script: |
           if which swiftlint > /dev/null; then
             swiftlint --config "${SRCROOT}/../.swiftlint.yml" "${SRCROOT}/Praeceptor"
