@@ -40,7 +40,9 @@ targets:
         CFBundleVersion: "1"
         NSMicrophoneUsageDescription: "The Praeceptor listens to your voice so you can speak directly into the session."
         NSSpeechRecognitionUsageDescription: "The Praeceptor uses speech recognition to transcribe your voice."
-        NSDocumentsFolderUsageDescription: "Used to read context from iCloud."
+        NSDocumentsFolderUsageDescription: "Used to read context files."
+        UIFileSharingEnabled: YES
+        LSSupportsOpeningDocumentsInPlace: YES
         UIBackgroundModes:
           - audio
         NSSupportsLiveActivities: YES

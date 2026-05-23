@@ -17,6 +17,7 @@ struct ProfileContextView: View {
     @State private var showFileImporter = false
     @State private var fileError: String? = nil
     @State private var iCloudError: String? = nil
+    @State private var copied = false
 
     private var theme: TimeOfDayTheme { TimeOfDayTheme.current(TimeOfDay.current) }
     private var charCount: Int { supplementalText.count }
@@ -36,6 +37,8 @@ struct ProfileContextView: View {
                         profileSection
                         sectionDivider
                         supplementalSection
+                        sectionDivider
+                        copyContextSection
                     }
                     .padding(.bottom, 60)
                 }
@@ -183,7 +186,7 @@ struct ProfileContextView: View {
             }
 
             uploadButton
-            if sessionStore.bridge.contextFolderURL != nil { iCloudButton }
+            iCloudButton
             if !supplementalText.isEmpty { clearButton }
 
             if let err = fileError ?? iCloudError {
@@ -232,17 +235,21 @@ struct ProfileContextView: View {
     }
 
     private var iCloudButton: some View {
-        Button { iCloudError = nil; syncFromICloud() } label: {
+        let usingICloud = sessionStore.bridge.isUsingICloud
+        let subtitle = usingICloud
+            ? "iCloud Drive → Praeceptor/"
+            : "Files app → On My iPhone → Praeceptor"
+        return Button { iCloudError = nil; syncFromICloud() } label: {
             HStack(spacing: 12) {
-                Image(systemName: "icloud.and.arrow.down")
+                Image(systemName: usingICloud ? "icloud.and.arrow.down" : "folder")
                     .font(.system(size: 15, weight: .medium))
                     .foregroundColor(theme.accent)
                     .frame(width: 20)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Sync from iCloud Folder")
+                    Text("Sync from Context Folder")
                         .font(TimeOfDayTheme.body(15))
                         .foregroundColor(theme.text)
-                    Text("iCloud Drive → Praeceptor/")
+                    Text(subtitle)
                         .font(TimeOfDayTheme.mono(10))
                         .foregroundColor(theme.textTertiary)
                         .kerning(1.4)
@@ -278,6 +285,52 @@ struct ProfileContextView: View {
             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
             .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(theme.line, lineWidth: 1))
         }
+    }
+
+    // MARK: — Copy Context
+
+    private var copyContextSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("CLAUDE CODE BRIEF")
+                .font(TimeOfDayTheme.mono(10))
+                .foregroundColor(theme.accent)
+                .kerning(2.4)
+                .textCase(.uppercase)
+
+            Button {
+                let prompt = sessionStore.bridge.copyContextPrompt()
+                UIPasteboard.general.string = prompt
+                copied = true
+                Task {
+                    try? await Task.sleep(for: .seconds(2))
+                    copied = false
+                }
+            } label: {
+                HStack(spacing: 12) {
+                    Image(systemName: copied ? "checkmark" : "doc.on.doc")
+                        .font(.system(size: 15, weight: .medium))
+                        .foregroundColor(copied ? theme.accent : theme.accent)
+                        .frame(width: 20)
+                    Text(copied ? "Copied" : "Copy Context Brief")
+                        .font(TimeOfDayTheme.body(15))
+                        .foregroundColor(theme.text)
+                    Spacer()
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 14)
+                .background(theme.raised)
+                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(copied ? theme.accent.opacity(0.4) : theme.line, lineWidth: 1))
+            }
+            .animation(.easeInOut(duration: 0.2), value: copied)
+
+            Text("Paste into Claude Code to give your ops mentor the right amount of context — who you are, what you're building, where you actually stand.")
+                .font(TimeOfDayTheme.body(13))
+                .foregroundColor(theme.textTertiary)
+                .lineSpacing(3)
+        }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 24)
     }
 
     // MARK: — Helpers

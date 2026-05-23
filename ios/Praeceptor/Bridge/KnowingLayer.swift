@@ -34,7 +34,6 @@ final class KnowingLayerBridge: ObservableObject {
         knowingLayer = layer
         guard let url = fileURL,
               let data = try? JSONEncoder().encode(layer) else { return }
-        // .completeFileProtection encrypts the file when the device is locked
         try? data.write(to: url, options: [.atomic, .completeFileProtection])
     }
 
@@ -60,13 +59,26 @@ final class KnowingLayerBridge: ObservableObject {
         save(layer)
     }
 
-    // MARK: — iCloud Context Folder
+    // MARK: — Context Folder (Files app → On My iPhone → Praeceptor)
 
     var contextFolderURL: URL? {
-        FileManager.default
+        // Prefer iCloud if available; fall back to local Documents (visible in Files app)
+        if let iCloudURL = FileManager.default
             .url(forUbiquityContainerIdentifier: nil)?
             .appendingPathComponent("Documents")
+            .appendingPathComponent("Praeceptor") {
+            try? FileManager.default.createDirectory(at: iCloudURL, withIntermediateDirectories: true)
+            return iCloudURL
+        }
+        let local = FileManager.default
+            .urls(for: .documentDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("Praeceptor")
+        try? FileManager.default.createDirectory(at: local, withIntermediateDirectories: true)
+        return local
+    }
+
+    var isUsingICloud: Bool {
+        FileManager.default.url(forUbiquityContainerIdentifier: nil) != nil
     }
 
     func scanICloudContextFolder() -> String? {
@@ -80,5 +92,52 @@ final class KnowingLayerBridge: ObservableObject {
         let combined = files.compactMap { try? String(contentsOf: $0, encoding: .utf8) }
             .joined(separator: "\n\n---\n\n")
         return combined.isEmpty ? nil : combined
+    }
+
+    // MARK: — Copy Context for Claude Code
+
+    func copyContextPrompt() -> String {
+        guard let layer = knowingLayer else {
+            return "No context available. Complete intake first."
+        }
+
+        var lines: [String] = []
+        let name = layer.person.name.isEmpty ? "Operator" : layer.person.name
+        lines.append("Operator: \(name)")
+        if !layer.person.primaryMission.isEmpty {
+            lines.append("Building: \(layer.person.primaryMission)")
+        }
+        if !layer.person.sovereigntyStage.isEmpty {
+            lines.append("Stage: \(layer.person.sovereigntyStage)")
+        }
+        if !layer.person.originalThesis.isEmpty {
+            lines.append("Original thesis: \(layer.person.originalThesis)")
+        }
+
+        lines.append("")
+
+        let focus = layer.currentState.activeProject.isEmpty
+            ? layer.currentState.whatTheyAreDoing
+            : layer.currentState.activeProject
+        if !focus.isEmpty {
+            lines.append("Current focus: \(focus)")
+        }
+        if !layer.currentState.whatTheySaidTheyWouldDo.isEmpty {
+            lines.append("Last commitment: \(layer.currentState.whatTheySaidTheyWouldDo)")
+        }
+        if !layer.currentState.whatTheyAreDoing.isEmpty && layer.currentState.whatTheyAreDoing != focus {
+            lines.append("Actually doing: \(layer.currentState.whatTheyAreDoing)")
+        }
+        if let tension = layer.openTensions.first, !tension.isEmpty {
+            lines.append("Recurring tension: \(tension)")
+        }
+
+        if let supplemental = layer.supplementalContext, !supplemental.isEmpty {
+            lines.append("")
+            lines.append("Additional context:")
+            lines.append(supplemental)
+        }
+
+        return lines.joined(separator: "\n")
     }
 }
