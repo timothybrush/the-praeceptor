@@ -68,6 +68,9 @@ the-praeceptor/
 │   ├── intake/
 │   │   ├── knowing-layer.md    — KNOWING layer template (fill per person)
 │   │   └── protocol.md         — first-session intake flow
+│   ├── reference/              — source material for the composite
+│   │   ├── composite-sources.md  — 10 sources with extracted mechanisms
+│   │   └── synthesis-methodology.md — how they were processed into one character
 │   └── outputs/                — example sessions showing the mentor in action
 │
 └── ios/                        ← native iOS voice app (Swift 6 / SwiftUI / iOS 18+)
