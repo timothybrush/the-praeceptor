@@ -38,4 +38,20 @@ final class VoiceProviderTests: XCTestCase {
         XCTAssertEqual(TTSProvider(rawValue: "elevenLabs"), .elevenLabs)
         XCTAssertNil(TTSProvider(rawValue: "unknown"))
     }
+
+    // MARK: — Codable roundtrip
+
+    func testTranscriptionProviderEncodesAndDecodes() throws {
+        let encoded = try JSONEncoder().encode(TranscriptionProvider.openAI)
+        let decoded = try JSONDecoder().decode(TranscriptionProvider.self, from: encoded)
+        XCTAssertEqual(decoded, .openAI)
+    }
+
+    func testTTSProviderEncodesAndDecodes() throws {
+        for provider in TTSProvider.allCases {
+            let encoded = try JSONEncoder().encode(provider)
+            let decoded = try JSONDecoder().decode(TTSProvider.self, from: encoded)
+            XCTAssertEqual(decoded, provider)
+        }
+    }
 }

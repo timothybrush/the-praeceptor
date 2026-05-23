@@ -76,4 +76,33 @@ final class SystemPromptBuilderTests: XCTestCase {
         XCTAssertFalse(SystemPromptBuilder.characterLayer.isEmpty)
         XCTAssertGreaterThan(SystemPromptBuilder.characterLayer.count, 500)
     }
+
+    func testVoiceLayerContainsStoriesSection() {
+        XCTAssertTrue(SystemPromptBuilder.voiceLayer.contains("Stories You Carry"))
+        XCTAssertGreaterThan(SystemPromptBuilder.voiceLayer.count, 500)
+    }
+
+    func testReferenceLayerContainsAllSixteenComposites() {
+        let layer = SystemPromptBuilder.referenceLayer
+        let figures = ["Grove", "Munger", "Campbell", "Walsh", "Marshall", "Ohno",
+                       "Seneca", "Aurelius", "Naval", "Scott", "Drucker",
+                       "Kahneman", "Lencioni", "Catmull", "Rogers", "Greene"]
+        for figure in figures {
+            XCTAssertTrue(layer.contains("**\(figure):**"), "Missing mechanism for \(figure)")
+        }
+    }
+
+    func testBuildIncludesVoiceAndReferenceLayers() {
+        let prompt = SystemPromptBuilder.build(knowingLayer: nil, sessionHistory: [], timeOfDay: .noon)
+        XCTAssertTrue(prompt.contains("Stories You Carry"))
+        XCTAssertTrue(prompt.contains("Composite Mechanisms"))
+    }
+
+    func testPromptRemainsUnderTokenBudget() {
+        let prompt = SystemPromptBuilder.build(knowingLayer: nil, sessionHistory: [], timeOfDay: .noon)
+        // Rough token estimate: ~4 chars per token. Budget: voiceLayer + referenceLayer < 4000 tokens.
+        let combinedLength = SystemPromptBuilder.voiceLayer.count + SystemPromptBuilder.referenceLayer.count
+        XCTAssertLessThan(combinedLength / 4, 4000, "voiceLayer + referenceLayer exceeds token budget")
+        XCTAssertGreaterThan(prompt.count, 1000)
+    }
 }

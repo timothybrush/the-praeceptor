@@ -80,7 +80,7 @@ the-praeceptor/
 │
 └── ios/                        ← native iOS voice app (Swift 6 / SwiftUI / iOS 18+)
     ├── Praeceptor/             — app source
-    ├── PraeceptorTests/        — 86 tests
+    ├── PraeceptorTests/        — 109 tests
     └── PraeceptorWidget/       — home screen + lock screen widgets
 ```
 

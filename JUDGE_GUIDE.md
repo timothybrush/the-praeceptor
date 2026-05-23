@@ -236,6 +236,8 @@ The Praeceptor activates without the app. He should:
 
 Reference `examples.md` for explicit BAD (mirror/reactive) vs GOOD (formed mentor) contrast.
 
+**The `reference/` folder** contains 17 structured behavioral extractions — one per source figure — each mapping from abstract principle to the exact behavioral move in a session. These are the source material for the composite, and they're what separates this from a character prompt written from memory.
+
 ---
 
 ## Architecture Reference
@@ -248,7 +250,7 @@ Reference `examples.md` for explicit BAD (mirror/reactive) vs GOOD (formed mento
 | `voice/*.md` | Five signature questions, seven blind spots, failure stories, refusals |
 | `intake/knowing-layer.md` | KNOWING layer schema — variable, ≤800 tokens, per-session |
 | `examples.md` | BAD vs GOOD — mirror vs formed mentor |
-| `ios/` | Swift 6, SwiftUI, iOS 18+, 86 unit tests |
+| `ios/` | Swift 6, SwiftUI, iOS 18+, 109 unit tests |
 
 ---
 
@@ -261,7 +263,7 @@ xcodebuild test -project Praeceptor.xcodeproj \
   -destination 'platform=iOS Simulator,id=<your-simulator-udid>'
 ```
 
-86 tests across 11 classes. All green.
+109 tests across 17 classes. All green.
 
 ---
 

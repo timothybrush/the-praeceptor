@@ -11,7 +11,7 @@ final class AudioPlayer: NSObject, ObservableObject, AVAudioPlayerDelegate {
     func play(data: Data, onComplete: @escaping () -> Void) throws {
         self.onComplete = onComplete
         let audioSession = AVAudioSession.sharedInstance()
-        try audioSession.setCategory(.playback)
+        try audioSession.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetoothHFP])
         try audioSession.setActive(true)
         player = try AVAudioPlayer(data: data)
         player?.delegate = self

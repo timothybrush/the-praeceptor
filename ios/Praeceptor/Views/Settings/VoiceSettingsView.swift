@@ -91,12 +91,13 @@ struct VoiceSettingsView: View {
                     .kerning(2.4)
                     .textCase(.uppercase)
                 Spacer()
-                Toggle("", isOn: Binding(
+                Toggle("Voice responses enabled", isOn: Binding(
                     get: { apiKeyManager.voiceResponsesEnabled },
                     set: { apiKeyManager.voiceResponsesEnabled = $0 }
                 ))
                 .tint(theme.accent)
                 .labelsHidden()
+                .accessibilityLabel("Voice responses enabled")
             }
 
             VStack(spacing: 0) {
@@ -240,6 +241,7 @@ struct VoiceSettingsView: View {
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
             }
+            .accessibilityLabel("Back")
             Spacer()
         }
         .padding(.horizontal, 12)

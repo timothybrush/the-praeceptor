@@ -203,7 +203,7 @@ struct SessionView: View {
                 Image(systemName: "keyboard")
                     .font(.system(size: 15))
                     .foregroundColor(theme.textSecondary)
-                    .frame(width: 28, height: 28)
+                    .frame(width: 44, height: 44)
             }
         }
         .padding(.bottom, 48)
@@ -220,7 +220,7 @@ struct SessionView: View {
                 Image(systemName: "mic.fill")
                     .font(.system(size: 16))
                     .foregroundColor(theme.textSecondary)
-                    .frame(width: 38, height: 38)
+                    .frame(width: 44, height: 44)
                     .background(theme.surface)
                     .clipShape(Circle())
                     .overlay(Circle().stroke(theme.line, lineWidth: 0.5))
@@ -246,13 +246,13 @@ struct SessionView: View {
                     Image(systemName: "arrow.right")
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundColor(theme.accentInk)
-                        .frame(width: 38, height: 38)
+                        .frame(width: 44, height: 44)
                         .background(theme.accent)
                         .clipShape(Circle())
                         .shadow(color: theme.accentGlow, radius: 8, x: 0, y: 4)
                 }
             } else {
-                Spacer().frame(width: 38)
+                Spacer().frame(width: 44)
             }
         }
         .padding(.horizontal, 16)

@@ -79,6 +79,16 @@ final class WhisperServiceTests: XCTestCase {
         }
     }
 
+    func testTempFileDeletedAfterSuccessfulTranscription() async throws {
+        MockURLProtocol.requestHandler = { _ in
+            (.make(url: "https://api.openai.com", status: 200), TestFixtures.whisperSuccessResponse())
+        }
+        try TestFixtures.wavData().write(to: tempAudioURL)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: tempAudioURL.path))
+        _ = try await service.transcribe(audioURL: tempAudioURL)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: tempAudioURL.path), "Temp audio file should be deleted after transcription")
+    }
+
     func testTranscribeSendsMultipartFormData() async throws {
         var capturedRequest: URLRequest?
         MockURLProtocol.requestHandler = { request in

@@ -173,6 +173,7 @@ struct DataPrivacyView: View {
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
             }
+            .accessibilityLabel("Back")
             Spacer()
         }
         .padding(.horizontal, 12)
