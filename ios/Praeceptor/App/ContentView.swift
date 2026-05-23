@@ -11,6 +11,20 @@ struct RootView: View {
         Group {
             if !splashDone {
                 SplashView(onComplete: { splashDone = true })
+                    .task {
+                        #if DEBUG
+                        let args = ProcessInfo.processInfo.arguments
+                        if args.contains("--fresh-start") {
+                            apiKeyManager.clearAll()
+                            editorialSeen = false
+                            sessionStore.resetIntake()
+                        }
+                        if args.contains("--skip-intake") {
+                            editorialSeen = true
+                            sessionStore.skipIntake()
+                        }
+                        #endif
+                    }
             } else if !apiKeyManager.hasRequiredKeys {
                 SettingsView(apiKeyManager: apiKeyManager)
             } else if !editorialSeen {

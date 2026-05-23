@@ -268,7 +268,6 @@ struct IntakeView: View {
                         .kerning(-0.2)
                         .lineLimit(1...5)
                         .tint(theme.accent)
-                        .opacity(binding.wrappedValue.isEmpty ? 0 : 1)
 
                     // Placeholder
                     if binding.wrappedValue.isEmpty {

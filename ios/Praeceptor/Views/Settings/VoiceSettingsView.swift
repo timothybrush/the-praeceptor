@@ -145,9 +145,46 @@ struct VoiceSettingsView: View {
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
                     .stroke(theme.line, lineWidth: 1)
             )
+
+            if apiKeyManager.elevenLabsKey != nil {
+                voiceIDField
+            }
         }
         .padding(.horizontal, 24)
         .padding(.vertical, 24)
+    }
+
+    private var voiceIDField: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("VOICE ID")
+                .font(TimeOfDayTheme.mono(10))
+                .foregroundColor(theme.accent)
+                .kerning(2.4)
+                .textCase(.uppercase)
+
+            TextField("Voice ID", text: Binding(
+                get: { apiKeyManager.elevenLabsVoiceID },
+                set: { apiKeyManager.elevenLabsVoiceID = $0 }
+            ))
+            .font(TimeOfDayTheme.mono(13))
+            .foregroundColor(theme.text)
+            .autocorrectionDisabled()
+            .textInputAutocapitalization(.never)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 14)
+            .background(theme.raised)
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .stroke(theme.line, lineWidth: 1)
+            )
+
+            Text("Find your voice ID in the ElevenLabs dashboard under Voices.")
+                .font(TimeOfDayTheme.body(13))
+                .foregroundColor(theme.textTertiary)
+                .lineSpacing(3)
+        }
+        .padding(.top, 16)
     }
 
     // MARK: — Speed

@@ -54,6 +54,13 @@ struct SplashView: View {
 
     @MainActor
     private func run() async {
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("--skip-splash") {
+            onComplete()
+            return
+        }
+        #endif
+
         // Fade in
         try? await Task.sleep(nanoseconds: 200_000_000)
         withAnimation(.easeIn(duration: 0.7)) { opacity = 1 }

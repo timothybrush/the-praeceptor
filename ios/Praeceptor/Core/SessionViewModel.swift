@@ -18,6 +18,7 @@ final class SessionViewModel: ObservableObject {
     private var claudeService: ClaudeService?
     private var whisperService: WhisperService?
     private var ttsService: TTSService?
+    private var elevenLabsService: ElevenLabsTTSService?
     private var appleSpeechService: AppleSpeechService?
     private var appleTTSService: AppleTTSService?
     private var knowingLayerUpdater: KnowingLayerUpdater?
@@ -35,6 +36,9 @@ final class SessionViewModel: ObservableObject {
         if let openAIKey = apiKeyManager.openAIKey {
             whisperService = WhisperService(apiKey: openAIKey)
             ttsService = TTSService(apiKey: openAIKey)
+        }
+        if let elevenLabsKey = apiKeyManager.elevenLabsKey {
+            elevenLabsService = ElevenLabsTTSService(apiKey: elevenLabsKey, voiceID: apiKeyManager.elevenLabsVoiceID)
         }
         startInterruptionObserver()
     }
@@ -245,8 +249,7 @@ final class SessionViewModel: ObservableObject {
         liveActivity.updateActivity(phase: .speaking)
 
         switch apiKeyManager?.ttsProvider ?? .apple {
-        case .apple, .elevenLabs:
-            // elevenLabs falls through to Apple TTS until service is implemented
+        case .apple:
             guard let svc = appleTTSService else {
                 setError("Voice service not initialized.")
                 return
@@ -261,6 +264,30 @@ final class SessionViewModel: ObservableObject {
             liveActivity.endActivity()
             phase = .idle
             fireKnowingUpdate(sessionStore: sessionStore)
+
+        case .elevenLabs:
+            guard let svc = elevenLabsService else {
+                setError("ElevenLabs key required. Add it in Settings → API & Authorization.")
+                return
+            }
+            do {
+                let audioData = try await svc.synthesize(text: fullResponse)
+                try player.play(data: audioData) { [weak self] in
+                    Task { @MainActor in
+                        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                        try? await Task.sleep(for: .milliseconds(120))
+                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                        try? await Task.sleep(for: .milliseconds(180))
+                        UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                        try? await Task.sleep(for: .milliseconds(400))
+                        self?.liveActivity.endActivity()
+                        self?.phase = .idle
+                        self?.fireKnowingUpdate(sessionStore: sessionStore)
+                    }
+                }
+            } catch {
+                setError(error.localizedDescription)
+            }
 
         case .openAI:
             guard let svc = ttsService else {

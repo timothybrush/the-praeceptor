@@ -72,6 +72,11 @@ final class APIKeyManager: ObservableObject {
         }
     }
 
+    var elevenLabsVoiceID: String {
+        get { UserDefaults.standard.string(forKey: "elevenLabsVoiceID") ?? "xzZRXG86mSM3naOyL9fa" }
+        set { UserDefaults.standard.set(newValue, forKey: "elevenLabsVoiceID"); objectWillChange.send() }
+    }
+
     private func save(key: String, value: String) {
         guard let data = value.data(using: .utf8) else { return }
         let query: [String: Any] = [
@@ -109,4 +114,15 @@ final class APIKeyManager: ObservableObject {
         ]
         SecItemDelete(query as CFDictionary)
     }
+
+    #if DEBUG
+    func clearAll() {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: keychainService
+        ]
+        SecItemDelete(query as CFDictionary)
+        hasRequiredKeys = false
+    }
+    #endif
 }

@@ -62,6 +62,12 @@ final class SessionStore: ObservableObject {
         clearSession()
     }
 
+    #if DEBUG
+    func skipIntake() {
+        hasIntakeCompleted = true
+    }
+    #endif
+
     private let contextPruningLimit = 40
 
     var conversationHistory: [[String: String]] {

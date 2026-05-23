@@ -37,6 +37,20 @@
          </BuildActionEntry>
          <BuildActionEntry
             buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B78370F4B6B04A5BAD3CCE0C"
+               BuildableName = "PraeceptorUITests.xctest"
+               BlueprintName = "PraeceptorUITests"
+               ReferencedContainer = "container:Praeceptor.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
             buildForRunning = "YES"
             buildForProfiling = "YES"
             buildForArchiving = "YES"
@@ -75,6 +89,17 @@
                BlueprintIdentifier = "D42173735E6A61980954F5D6"
                BuildableName = "PraeceptorTests.xctest"
                BlueprintName = "PraeceptorTests"
+               ReferencedContainer = "container:Praeceptor.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B78370F4B6B04A5BAD3CCE0C"
+               BuildableName = "PraeceptorUITests.xctest"
+               BlueprintName = "PraeceptorUITests"
                ReferencedContainer = "container:Praeceptor.xcodeproj">
             </BuildableReference>
          </TestableReference>

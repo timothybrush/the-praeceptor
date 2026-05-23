@@ -38,11 +38,13 @@
 		5E6F8386A29B335CFB5BC5BD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB70D8D8DFFA3C70E0AA1FB /* ContentView.swift */; };
 		644E5B2DAB3B423F102E388F /* PraeceptorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5839BC94A6AEE53DBB061706 /* PraeceptorApp.swift */; };
 		6E6AA50F75F8945C0352E830 /* VoiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B3F70A9AC651F5451F0C60 /* VoiceProvider.swift */; };
+		6FE614F1A504D284DBDCF979 /* KeychainInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9BDA6734E155C770290C960 /* KeychainInjector.swift */; };
 		70BD510F7F81E9790DACBFD3 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAB85F78D78A948A77555890 /* Session.swift */; };
 		7851584644707CB3E91AE548 /* PraeceptorActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B73F993888E07B2A2F9E3AB /* PraeceptorActivityAttributes.swift */; };
 		7B3E5BA40FABDEAE6502D56A /* ClaudeServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A73BE1832321914E96D17C6 /* ClaudeServiceTests.swift */; };
 		81991ADE893872896AED3353 /* APIAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C607F8807F9D24F812EA6E3 /* APIAuthView.swift */; };
 		89E35610327D2A65183A1C8A /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F36DF415701758D29769562 /* NotificationManager.swift */; };
+		8BB22E054A3007F9ED921ED7 /* ElevenLabsTTSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82015D28F5D108EF8F57B91 /* ElevenLabsTTSService.swift */; };
 		8C1426A6C57550AF561874B9 /* AppleSpeechServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D563978C54B69063DBCDB348 /* AppleSpeechServiceTests.swift */; };
 		918CD0B5E7729392C38AAFD7 /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC162C241D9EF02A0956D9A1 /* SessionView.swift */; };
 		9320F2B1D64681DD438A2485 /* PraeceptorActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B73F993888E07B2A2F9E3AB /* PraeceptorActivityAttributes.swift */; };
@@ -68,10 +70,18 @@
 		E451E5068BF106198370E9E1 /* MockURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15BF928D383D10DFC4C019D /* MockURLProtocol.swift */; };
 		FA270E76404E141EE239D8DA /* PraeceptorWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB18E2A905672A7485DDA4E /* PraeceptorWidgetBundle.swift */; };
 		FDEAAC0F5A532EBEB70707BC /* KnowingLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEB2A6B473886BDDF544941 /* KnowingLayer.swift */; };
+		FEB096FCB0DF61E6768FA895 /* ScreenshotFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302909A9CC5643F5EF2CD87 /* ScreenshotFlow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		224033BEF73A89D3BF0455BE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 309A4FA066048E9A348BC290 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 316085E51AA547120223ED4D;
+			remoteInfo = Praeceptor;
+		};
+		8B2B7C2B7CE1302E1941F43B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 309A4FA066048E9A348BC290 /* Project object */;
 			proxyType = 1;
@@ -112,7 +122,9 @@
 		1B2406596FB7620EDA95862D /* TTSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSService.swift; sourceTree = "<group>"; };
 		20ECB04D015E61315156EF0F /* VoiceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceSettingsView.swift; sourceTree = "<group>"; };
 		21FE0F3382ECB02F99FFE907 /* Praeceptor.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Praeceptor.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2302909A9CC5643F5EF2CD87 /* ScreenshotFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotFlow.swift; sourceTree = "<group>"; };
 		2973AFC1A666DFAE44EF95CF /* EditorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorialView.swift; sourceTree = "<group>"; };
+		3080C15B01E8F6EC3ACB5023 /* PraeceptorUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PraeceptorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		32D3D1D24C3282E08ED49658 /* SessionStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionStoreTests.swift; sourceTree = "<group>"; };
 		33B49A73B65EC59B0A05B940 /* TTSServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSServiceTests.swift; sourceTree = "<group>"; };
 		373FE3AC2CBD804A058C6C29 /* AppleTTSServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleTTSServiceTests.swift; sourceTree = "<group>"; };
@@ -149,6 +161,7 @@
 		AC6ACFF4D4074154E90BE378 /* NetworkSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSession.swift; sourceTree = "<group>"; };
 		B7787A95B28D14580472D38D /* APIKeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeyManager.swift; sourceTree = "<group>"; };
 		B7C27669154B9B64B44576E9 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
+		B82015D28F5D108EF8F57B91 /* ElevenLabsTTSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevenLabsTTSService.swift; sourceTree = "<group>"; };
 		BA35D71207DDAABF49BA654A /* ProfileContextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileContextView.swift; sourceTree = "<group>"; };
 		BA80A7A331186682DD0FED41 /* SessionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionViewModelTests.swift; sourceTree = "<group>"; };
 		BAB85F78D78A948A77555890 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
@@ -159,6 +172,7 @@
 		C928237C6410D232C6416AA4 /* PraeceptorWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = PraeceptorWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D15BF928D383D10DFC4C019D /* MockURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLProtocol.swift; sourceTree = "<group>"; };
 		D563978C54B69063DBCDB348 /* AppleSpeechServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSpeechServiceTests.swift; sourceTree = "<group>"; };
+		D9BDA6734E155C770290C960 /* KeychainInjector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainInjector.swift; sourceTree = "<group>"; };
 		E677E475170D5407D843E5B0 /* SystemPromptBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemPromptBuilderTests.swift; sourceTree = "<group>"; };
 		E6B3F70A9AC651F5451F0C60 /* VoiceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceProvider.swift; sourceTree = "<group>"; };
 		E84C5FBB48FB6046CA6DBAE7 /* VoiceProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceProviderTests.swift; sourceTree = "<group>"; };
@@ -182,6 +196,7 @@
 			children = (
 				21FE0F3382ECB02F99FFE907 /* Praeceptor.app */,
 				A2F78F86EFCB05B7A523617F /* PraeceptorTests.xctest */,
+				3080C15B01E8F6EC3ACB5023 /* PraeceptorUITests.xctest */,
 				C928237C6410D232C6416AA4 /* PraeceptorWidget.appex */,
 			);
 			name = Products;
@@ -227,10 +242,19 @@
 			children = (
 				6B430426505125941FB05906 /* Praeceptor */,
 				9DACA8B0B964F9F8CFF0A918 /* PraeceptorTests */,
+				4CC14F5E0AA254481B5DF890 /* PraeceptorUITests */,
 				794A0761A96739C6850EE476 /* PraeceptorWidget */,
 				D2604AE8BB40235637B94561 /* Shared */,
 				0D81FF88C4344E0F79F70116 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		4CC14F5E0AA254481B5DF890 /* PraeceptorUITests */ = {
+			isa = PBXGroup;
+			children = (
+				2302909A9CC5643F5EF2CD87 /* ScreenshotFlow.swift */,
+			);
+			path = PraeceptorUITests;
 			sourceTree = "<group>";
 		};
 		6B430426505125941FB05906 /* Praeceptor */ = {
@@ -318,6 +342,7 @@
 				9DA8DDF073B53BBCCE9A1C57 /* AudioPlayer.swift */,
 				B7C27669154B9B64B44576E9 /* AudioRecorder.swift */,
 				538A19AEA909BD1A4198628A /* ClaudeService.swift */,
+				B82015D28F5D108EF8F57B91 /* ElevenLabsTTSService.swift */,
 				9EA2143CA6477DE0ABCD6C48 /* KnowingLayerUpdater.swift */,
 				AC6ACFF4D4074154E90BE378 /* NetworkSession.swift */,
 				1B2406596FB7620EDA95862D /* TTSService.swift */,
@@ -359,6 +384,7 @@
 		EA2BA4E9944D93B024CF453B /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				D9BDA6734E155C770290C960 /* KeychainInjector.swift */,
 				D15BF928D383D10DFC4C019D /* MockURLProtocol.swift */,
 				436E32C723712FF11AD6B920 /* TestFixtures.swift */,
 			);
@@ -424,6 +450,24 @@
 			productReference = C928237C6410D232C6416AA4 /* PraeceptorWidget.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		B78370F4B6B04A5BAD3CCE0C /* PraeceptorUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 68A4A453560646D672333B51 /* Build configuration list for PBXNativeTarget "PraeceptorUITests" */;
+			buildPhases = (
+				1DDF4CAAEC3CC78383C1BA0C /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				12D7921241DBB480811E0BA5 /* PBXTargetDependency */,
+			);
+			name = PraeceptorUITests;
+			packageProductDependencies = (
+			);
+			productName = PraeceptorUITests;
+			productReference = 3080C15B01E8F6EC3ACB5023 /* PraeceptorUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		D42173735E6A61980954F5D6 /* PraeceptorTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B5911599B880468A9C98C8C8 /* Build configuration list for PBXNativeTarget "PraeceptorTests" */;
@@ -459,6 +503,10 @@
 						DevelopmentTeam = "";
 						ProvisioningStyle = Manual;
 					};
+					B78370F4B6B04A5BAD3CCE0C = {
+						DevelopmentTeam = "";
+						TestTargetID = 316085E51AA547120223ED4D;
+					};
 					D42173735E6A61980954F5D6 = {
 						DevelopmentTeam = "";
 					};
@@ -480,6 +528,7 @@
 			targets = (
 				316085E51AA547120223ED4D /* Praeceptor */,
 				D42173735E6A61980954F5D6 /* PraeceptorTests */,
+				B78370F4B6B04A5BAD3CCE0C /* PraeceptorUITests */,
 				AF4150FDA73287E8CC04DE43 /* PraeceptorWidget */,
 			);
 		};
@@ -518,6 +567,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		1DDF4CAAEC3CC78383C1BA0C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FEB096FCB0DF61E6768FA895 /* ScreenshotFlow.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BD763B9DDE78BB9CF84794F8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -532,6 +589,7 @@
 				5E6F8386A29B335CFB5BC5BD /* ContentView.swift in Sources */,
 				3AD8D21042E209532A7D6EB8 /* DataPrivacyView.swift in Sources */,
 				13479B8B4F7777FB729BC113 /* EditorialView.swift in Sources */,
+				8BB22E054A3007F9ED921ED7 /* ElevenLabsTTSService.swift in Sources */,
 				1DBA7AE431CF7300CBAD9C41 /* HoldToSpeakButton.swift in Sources */,
 				D230B163320353B5BD0D4849 /* IntakeView.swift in Sources */,
 				FDEAAC0F5A532EBEB70707BC /* KnowingLayer.swift in Sources */,
@@ -573,6 +631,7 @@
 				D1034A21B7C497627BFD6DC4 /* AudioPlayerTests.swift in Sources */,
 				20B4979E60CA1950C5E66CDB /* AudioRecorderTests.swift in Sources */,
 				7B3E5BA40FABDEAE6502D56A /* ClaudeServiceTests.swift in Sources */,
+				6FE614F1A504D284DBDCF979 /* KeychainInjector.swift in Sources */,
 				316CA1C2EFEB5FCC32A667B0 /* KnowingLayerModelTests.swift in Sources */,
 				29DFCEE34956C243B04C1C2C /* KnowingLayerUpdaterTests.swift in Sources */,
 				E451E5068BF106198370E9E1 /* MockURLProtocol.swift in Sources */,
@@ -601,6 +660,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		12D7921241DBB480811E0BA5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 316085E51AA547120223ED4D /* Praeceptor */;
+			targetProxy = 8B2B7C2B7CE1302E1941F43B /* PBXContainerItemProxy */;
+		};
 		7E07059B3F622CEF6F2D3E8B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = AF4150FDA73287E8CC04DE43 /* PraeceptorWidget */;
@@ -781,6 +845,26 @@
 			};
 			name = Release;
 		};
+		92A9E59DBB692774013132C6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.praeceptor.uitests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_APPLICATION = Praeceptor;
+				TEST_TARGET_NAME = Praeceptor;
+			};
+			name = Release;
+		};
 		A4AEFCF53A3FAB0FCB89C86F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -822,6 +906,26 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Praeceptor.app/Praeceptor";
 			};
 			name = Release;
+		};
+		C85B1F4D4B4D6E30D96D8396 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.praeceptor.uitests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_APPLICATION = Praeceptor;
+				TEST_TARGET_NAME = Praeceptor;
+			};
+			name = Debug;
 		};
 		D2C6E06F20FDEF7BE99C5451 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -882,6 +986,15 @@
 			buildConfigurations = (
 				65BB8AFC20613E8AD5100170 /* Debug */,
 				707A92F1C6B8D3F20F1A2B22 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		68A4A453560646D672333B51 /* Build configuration list for PBXNativeTarget "PraeceptorUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C85B1F4D4B4D6E30D96D8396 /* Debug */,
+				92A9E59DBB692774013132C6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
