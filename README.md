@@ -68,9 +68,14 @@ the-praeceptor/
 │   ├── intake/
 │   │   ├── knowing-layer.md    — KNOWING layer template (fill per person)
 │   │   └── protocol.md         — first-session intake flow
-│   ├── reference/              — source material for the composite
+│   ├── reference/              — source library for the composite
+│   │   ├── SOURCES.md            — full book list + instructions for adding to Claude Project
 │   │   ├── composite-sources.md  — 10 sources with extracted mechanisms
-│   │   └── synthesis-methodology.md — how they were processed into one character
+│   │   ├── synthesis-methodology.md — how they were processed into one character
+│   │   ├── campbell-coaching-methodology.md — structured extraction from Trillion Dollar Coach
+│   │   ├── aurelius-meditations.md — Meditations (public domain)
+│   │   ├── articles/             — public speeches and essays
+│   │   └── transcripts/          — 8 source transcripts
 │   └── outputs/                — example sessions showing the mentor in action
 │
 └── ios/                        ← native iOS voice app (Swift 6 / SwiftUI / iOS 18+)

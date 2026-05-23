@@ -1,0 +1,63 @@
+Material Science was kind of at the
+basics basis of all of the things going
+on with
+semiconductors uh the manufacturing the
+technology printing smaller transistors
+the lithography Etc and the other thing
+that I found quite intriguing was in
+fact there was a thing called Mo's law
+and how many of you have heard of Mor
+Moors
+law how many of you read the original
+article in 19 65 in electronics
+magazine that's kind of what I thought I
+one um anyway you know Gordon Moore was
+founder of Intel but he really had
+written the paper about Moore's law when
+he was at Fairchild is really the head
+of their
+R&amp;D effort there and just notice that
+integrated circuits started in about
+1960 was now 1965 5 years later he
+noticed a certain Trend and if you
+applauded the number of
+transistors per integrated circuit over
+a five or six year period it looked like
+it was a a
+log plot or a linear plot in a long
+scale so it kind of meant that you were
+doubling every 18 months or so in terms
+of transistors and transistors related
+into functionality performance a whole
+bunch of other things and if you read
+the article it says very simply uh Hey
+I've made this observation it can't
+possibly last but it's interesting that
+it's gone so far and maybe it can last
+for another 5 years or so but it nothing
+continues to double for very long in
+nature uh and I then had the pleasure
+when I was working at Intel interacting
+with Gordon Moore for 35 years and every
+year I would ask him about Mo's law and
+every year he would say it's going to
+die soon and we are now you
+know 40 some years later and it's still
+going and it's pretty cool that it looks
+like it's going to go for another 15
+years or so so Moors law will probably
+end up uh having 60 years or so of
+History before you have to change that
+basic transistor structure and uh it
+will change there's no question about
+that just as vacuum tubes kind of died
+when transistors came along transistors
+will die when the next electronic switch
+comes along we just don't know what it's
+like you're doing lots of research here
+at the University on that it's a great
+entrepreneurial effort uh something will
+have to happen but Mo's law is is very
+interesting uh and the pursuit of Mo's
+law has been interesting for the last 35
+years
