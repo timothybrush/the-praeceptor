@@ -66,9 +66,9 @@ targets:
         script: |
           SWIFTLINT=/opt/homebrew/bin/swiftlint
           if [ -f "$SWIFTLINT" ]; then
-            "$SWIFTLINT" --config "${SRCROOT}/../.swiftlint.yml" "${SRCROOT}/Praeceptor"
+            "$SWIFTLINT" --config "${SRCROOT}/.swiftlint.yml" "${SRCROOT}/Praeceptor"
           elif which swiftlint > /dev/null; then
-            swiftlint --config "${SRCROOT}/../.swiftlint.yml" "${SRCROOT}/Praeceptor"
+            swiftlint --config "${SRCROOT}/.swiftlint.yml" "${SRCROOT}/Praeceptor"
           else
             echo "warning: SwiftLint not installed. Run: brew install swiftlint"
           fi
