@@ -27,6 +27,11 @@ final class APIKeyManager: ObservableObject {
         }
     }
 
+    var voiceResponsesEnabled: Bool {
+        get { UserDefaults.standard.object(forKey: "voiceResponsesEnabled") as? Bool ?? true }
+        set { UserDefaults.standard.set(newValue, forKey: "voiceResponsesEnabled"); objectWillChange.send() }
+    }
+
     var speakingSpeed: Double {
         get {
             let v = UserDefaults.standard.double(forKey: "speakingSpeed")

@@ -233,6 +233,13 @@ final class SessionViewModel: ObservableObject {
         streamingText = ""
 
         // 2. TTS + Playback
+        guard apiKeyManager?.voiceResponsesEnabled ?? true else {
+            liveActivity.endActivity()
+            phase = .idle
+            fireKnowingUpdate(sessionStore: sessionStore)
+            return
+        }
+
         phase = .speaking
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         liveActivity.updateActivity(phase: .speaking)

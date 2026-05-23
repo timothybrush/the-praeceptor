@@ -84,18 +84,27 @@ struct VoiceSettingsView: View {
 
     private var ttsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("VOICE OUTPUT")
-                .font(TimeOfDayTheme.mono(10))
-                .foregroundColor(theme.accent)
-                .kerning(2.4)
-                .textCase(.uppercase)
+            HStack {
+                Text("VOICE OUTPUT")
+                    .font(TimeOfDayTheme.mono(10))
+                    .foregroundColor(theme.accent)
+                    .kerning(2.4)
+                    .textCase(.uppercase)
+                Spacer()
+                Toggle("", isOn: Binding(
+                    get: { apiKeyManager.voiceResponsesEnabled },
+                    set: { apiKeyManager.voiceResponsesEnabled = $0 }
+                ))
+                .tint(theme.accent)
+                .labelsHidden()
+            }
 
             VStack(spacing: 0) {
                 providerRow(
                     title: "Apple",
                     subtitle: "Free · On-device synthesis",
                     isSelected: apiKeyManager.ttsProvider == .apple,
-                    isAvailable: true,
+                    isAvailable: apiKeyManager.voiceResponsesEnabled,
                     unavailableNote: nil
                 ) { apiKeyManager.ttsProvider = .apple }
 
@@ -107,7 +116,7 @@ struct VoiceSettingsView: View {
                         ? "Using your OpenAI key"
                         : "Add key in API & Authorization →",
                     isSelected: apiKeyManager.ttsProvider == .openAI,
-                    isAvailable: apiKeyManager.openAIKey != nil,
+                    isAvailable: apiKeyManager.voiceResponsesEnabled && apiKeyManager.openAIKey != nil,
                     unavailableNote: apiKeyManager.openAIKey == nil ? "Requires OpenAI key" : nil
                 ) {
                     guard apiKeyManager.openAIKey != nil else { return }
@@ -122,7 +131,7 @@ struct VoiceSettingsView: View {
                         ? "Using your ElevenLabs key"
                         : "Add key in API & Authorization →",
                     isSelected: apiKeyManager.ttsProvider == .elevenLabs,
-                    isAvailable: apiKeyManager.elevenLabsKey != nil,
+                    isAvailable: apiKeyManager.voiceResponsesEnabled && apiKeyManager.elevenLabsKey != nil,
                     unavailableNote: apiKeyManager.elevenLabsKey == nil ? "Requires ElevenLabs key" : nil
                 ) {
                     guard apiKeyManager.elevenLabsKey != nil else { return }
@@ -142,10 +151,12 @@ struct VoiceSettingsView: View {
 
     // MARK: — Speed
 
+    @ViewBuilder
     private var speedSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
                 Text("SPEAKING SPEED")
+                    .opacity(apiKeyManager.voiceResponsesEnabled ? 1 : 0.4)
                     .font(TimeOfDayTheme.mono(10))
                     .foregroundColor(theme.accent)
                     .kerning(2.4)
@@ -165,6 +176,8 @@ struct VoiceSettingsView: View {
                 step: 0.01
             )
             .tint(theme.accent)
+            .disabled(!apiKeyManager.voiceResponsesEnabled)
+            .opacity(apiKeyManager.voiceResponsesEnabled ? 1 : 0.4)
 
             HStack {
                 Text("Slower")
