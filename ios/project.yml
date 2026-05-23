@@ -64,7 +64,10 @@ targets:
       - name: SwiftLint
         basedOnDependencyAnalysis: false
         script: |
-          if which swiftlint > /dev/null; then
+          SWIFTLINT=/opt/homebrew/bin/swiftlint
+          if [ -f "$SWIFTLINT" ]; then
+            "$SWIFTLINT" --config "${SRCROOT}/../.swiftlint.yml" "${SRCROOT}/Praeceptor"
+          elif which swiftlint > /dev/null; then
             swiftlint --config "${SRCROOT}/../.swiftlint.yml" "${SRCROOT}/Praeceptor"
           else
             echo "warning: SwiftLint not installed. Run: brew install swiftlint"

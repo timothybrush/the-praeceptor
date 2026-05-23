@@ -567,7 +567,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint > /dev/null; then\n  swiftlint --config \"${SRCROOT}/../.swiftlint.yml\" \"${SRCROOT}/Praeceptor\"\nelse\n  echo \"warning: SwiftLint not installed. Run: brew install swiftlint\"\nfi\n";
+			shellScript = "SWIFTLINT=/opt/homebrew/bin/swiftlint\nif [ -f \"$SWIFTLINT\" ]; then\n  \"$SWIFTLINT\" --config \"${SRCROOT}/../.swiftlint.yml\" \"${SRCROOT}/Praeceptor\"\nelif which swiftlint > /dev/null; then\n  swiftlint --config \"${SRCROOT}/../.swiftlint.yml\" \"${SRCROOT}/Praeceptor\"\nelse\n  echo \"warning: SwiftLint not installed. Run: brew install swiftlint\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
