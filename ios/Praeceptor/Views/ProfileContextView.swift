@@ -18,35 +18,26 @@ struct ProfileContextView: View {
     @State private var fileError: String? = nil
     @State private var iCloudError: String? = nil
 
+    private var theme: TimeOfDayTheme { TimeOfDayTheme.current(TimeOfDay.current) }
     private var charCount: Int { supplementalText.count }
     private var isOverLimit: Bool { charCount > KnowingLayer.supplementalContextLimit }
-
     private var canSave: Bool {
         !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !isOverLimit
     }
 
     var body: some View {
-        NavigationStack {
-            Form {
-                profileSection
-                contextSection
-                if let err = fileError ?? iCloudError {
-                    Section {
-                        Text(err)
-                            .font(.system(size: 13))
-                            .foregroundStyle(.red)
+        ZStack {
+            theme.background.ignoresSafeArea()
+            VStack(spacing: 0) {
+                sheetHeader
+                theme.line.frame(height: 1)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 0) {
+                        profileSection
+                        sectionDivider
+                        supplementalSection
                     }
-                }
-            }
-            .navigationTitle("Profile & Context")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") { save(); dismiss() }
-                        .disabled(!canSave)
+                    .padding(.bottom, 60)
                 }
             }
         }
@@ -60,95 +51,239 @@ struct ProfileContextView: View {
         }
     }
 
-    // MARK: — Sections
+    // MARK: — Header
 
-    private var profileSection: some View {
-        Section {
-            profileField("Name", binding: $name)
-            profileField("What you're building", binding: $primaryMission)
-            profileField("Where you stand", binding: $sovereigntyStage)
-            profileField("Original thesis", binding: $originalThesis)
-            profileField("Current focus", binding: $currentFocus)
-            profileField("Last commitment", binding: $lastCommitment)
-            profileField("Recurring tension (optional)", binding: $openTension)
-        } header: {
-            Text("Profile")
-        } footer: {
-            Text("These answers shape every session. Update as your situation changes.")
+    private var sheetHeader: some View {
+        HStack {
+            Button("Cancel") { dismiss() }
+                .font(TimeOfDayTheme.body(15))
+                .foregroundColor(theme.textSecondary)
+                .frame(minWidth: 64, alignment: .leading)
+
+            Spacer()
+
+            Text("Profile & Context")
+                .font(TimeOfDayTheme.body(15))
+                .fontWeight(.medium)
+                .foregroundColor(theme.text)
+
+            Spacer()
+
+            Button("Save") { save(); dismiss() }
+                .font(TimeOfDayTheme.body(15))
+                .fontWeight(.medium)
+                .foregroundColor(canSave ? theme.accent : theme.textGhost)
+                .frame(minWidth: 64, alignment: .trailing)
+                .disabled(!canSave)
         }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 16)
     }
 
-    private var contextSection: some View {
-        Section {
+    // MARK: — Profile Section
+
+    private var profileSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("PROFILE")
+                .font(TimeOfDayTheme.mono(10))
+                .foregroundColor(theme.accent)
+                .kerning(2.4)
+                .textCase(.uppercase)
+
+            VStack(spacing: 0) {
+                profileRow(label: "Name", binding: $name, placeholder: "Your name")
+                theme.line.frame(height: 1)
+                profileRow(label: "What you're building", binding: $primaryMission, placeholder: "One line")
+                theme.line.frame(height: 1)
+                profileRow(label: "Where you stand", binding: $sovereigntyStage, placeholder: "Your current stage")
+                theme.line.frame(height: 1)
+                profileRow(label: "Original thesis", binding: $originalThesis, placeholder: "Why you started")
+                theme.line.frame(height: 1)
+                profileRow(label: "Current focus", binding: $currentFocus, placeholder: "What you're working on now")
+                theme.line.frame(height: 1)
+                profileRow(label: "Last commitment", binding: $lastCommitment, placeholder: "What you said you'd do")
+                theme.line.frame(height: 1)
+                profileRow(label: "Recurring tension", binding: $openTension, placeholder: "Optional")
+            }
+            .background(theme.raised)
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .stroke(theme.line, lineWidth: 1)
+            )
+
+            Text("These answers shape every session. Update as your situation changes.")
+                .font(TimeOfDayTheme.body(13))
+                .foregroundColor(theme.textTertiary)
+                .lineSpacing(3)
+        }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 24)
+    }
+
+    private func profileRow(label: String, binding: Binding<String>, placeholder: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(label)
+                .font(TimeOfDayTheme.mono(9))
+                .foregroundColor(theme.textTertiary)
+                .kerning(1.8)
+                .textCase(.uppercase)
+            TextField(placeholder, text: binding, axis: .vertical)
+                .font(TimeOfDayTheme.body(15))
+                .foregroundColor(theme.text)
+                .tint(theme.accent)
+                .lineLimit(1...4)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+    }
+
+    // MARK: — Supplemental Section
+
+    private var supplementalSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("SUPPLEMENTAL CONTEXT")
+                .font(TimeOfDayTheme.mono(10))
+                .foregroundColor(theme.accent)
+                .kerning(2.4)
+                .textCase(.uppercase)
+
             ZStack(alignment: .topLeading) {
                 if supplementalText.isEmpty {
-                    Text("Paste context here — AI chat export, ICP, operating principles, role history...")
-                        .foregroundStyle(.secondary)
-                        .font(.system(size: 14))
-                        .padding(.top, 8)
-                        .padding(.leading, 4)
+                    Text("Paste context here — AI chat export, ICP, operating principles, role history…")
+                        .font(TimeOfDayTheme.body(14))
+                        .foregroundColor(theme.textGhost)
+                        .padding(.top, 14)
+                        .padding(.leading, 17)
                         .allowsHitTesting(false)
                 }
                 TextEditor(text: $supplementalText)
-                    .font(.system(size: 14))
-                    .frame(minHeight: 100)
-                    .opacity(supplementalText.isEmpty ? 0.01 : 1)
+                    .font(TimeOfDayTheme.body(14))
+                    .foregroundColor(theme.text)
+                    .tint(theme.accent)
+                    .scrollContentBackground(.hidden)
+                    .background(.clear)
+                    .frame(minHeight: 120)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
             }
+            .background(theme.raised)
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .stroke(isOverLimit ? Color.red.opacity(0.6) : theme.line, lineWidth: 1)
+            )
 
             HStack {
                 Text("\(charCount) / \(KnowingLayer.supplementalContextLimit) characters")
-                    .font(.system(size: 12))
-                    .foregroundStyle(isOverLimit ? .red : .secondary)
+                    .font(TimeOfDayTheme.mono(10))
+                    .foregroundColor(isOverLimit ? .red : theme.textGhost)
+                    .kerning(1.4)
                 Spacer()
             }
-            .listRowBackground(Color.clear)
-            .listRowInsets(.init())
+
+            uploadButton
+            if sessionStore.bridge.contextFolderURL != nil { iCloudButton }
+            if !supplementalText.isEmpty { clearButton }
+
+            if let err = fileError ?? iCloudError {
+                Text(err)
+                    .font(TimeOfDayTheme.body(13))
+                    .foregroundColor(.red)
+                    .lineSpacing(3)
+            }
+
+            Text("Max \(KnowingLayer.supplementalContextLimit) characters (~500 tokens). Attached to every session.")
+                .font(TimeOfDayTheme.body(13))
+                .foregroundColor(theme.textTertiary)
+                .lineSpacing(3)
+        }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 24)
+    }
+
+    private var uploadButton: some View {
+        Button { fileError = nil; showFileImporter = true } label: {
+            HStack(spacing: 12) {
+                Image(systemName: "arrow.up.doc")
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundColor(theme.accent)
+                    .frame(width: 20)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Upload File")
+                        .font(TimeOfDayTheme.body(15))
+                        .foregroundColor(theme.text)
+                    Text(".txt or .json")
+                        .font(TimeOfDayTheme.mono(10))
+                        .foregroundColor(theme.textTertiary)
+                        .kerning(1.4)
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12))
+                    .foregroundColor(theme.textGhost)
+            }
             .padding(.horizontal, 16)
+            .padding(.vertical, 14)
+            .background(theme.raised)
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(theme.line, lineWidth: 1))
+        }
+    }
 
-            Button {
-                fileError = nil
-                showFileImporter = true
-            } label: {
-                Label("Upload File (.txt or .json)", systemImage: "doc.badge.plus")
-            }
-
-            if sessionStore.bridge.contextFolderURL != nil {
-                Button {
-                    iCloudError = nil
-                    syncFromICloud()
-                } label: {
-                    Label("Sync from iCloud Folder", systemImage: "icloud.and.arrow.down")
+    private var iCloudButton: some View {
+        Button { iCloudError = nil; syncFromICloud() } label: {
+            HStack(spacing: 12) {
+                Image(systemName: "icloud.and.arrow.down")
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundColor(theme.accent)
+                    .frame(width: 20)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Sync from iCloud Folder")
+                        .font(TimeOfDayTheme.body(15))
+                        .foregroundColor(theme.text)
+                    Text("iCloud Drive → Praeceptor/")
+                        .font(TimeOfDayTheme.mono(10))
+                        .foregroundColor(theme.textTertiary)
+                        .kerning(1.4)
                 }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12))
+                    .foregroundColor(theme.textGhost)
             }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 14)
+            .background(theme.raised)
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(theme.line, lineWidth: 1))
+        }
+    }
 
-            if !supplementalText.isEmpty {
-                Button(role: .destructive) {
-                    supplementalText = ""
-                } label: {
-                    Label("Clear Context", systemImage: "trash")
-                }
+    private var clearButton: some View {
+        Button { supplementalText = "" } label: {
+            HStack(spacing: 12) {
+                Image(systemName: "trash")
+                    .font(.system(size: 14))
+                    .foregroundColor(theme.bad)
+                    .frame(width: 20)
+                Text("Clear Context")
+                    .font(TimeOfDayTheme.body(15))
+                    .foregroundColor(theme.bad)
+                Spacer()
             }
-        } header: {
-            Text("Supplemental Context")
-        } footer: {
-            Text("Drop .txt or .json files into iCloud Drive → Praeceptor/ to sync here. Max 2,000 characters (~500 tokens). This context is attached to every session.")
+            .padding(.horizontal, 16)
+            .padding(.vertical, 14)
+            .background(theme.raised)
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(theme.line, lineWidth: 1))
         }
     }
 
     // MARK: — Helpers
 
-    @ViewBuilder
-    private func profileField(_ label: String, binding: Binding<String>) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(label)
-                .font(.system(size: 11))
-                .foregroundStyle(.secondary)
-                .textCase(.uppercase)
-            TextField("", text: binding, axis: .vertical)
-                .font(.system(size: 15))
-                .lineLimit(1...4)
-        }
-        .padding(.vertical, 4)
+    private var sectionDivider: some View {
+        theme.line.frame(height: 1).padding(.horizontal, 24)
     }
 
     private func populate() {
@@ -174,8 +309,8 @@ struct ProfileContextView: View {
         layer.currentState.whatTheySaidTheyWouldDo = lastCommitment.trimmingCharacters(in: .whitespacesAndNewlines)
         let tension = openTension.trimmingCharacters(in: .whitespacesAndNewlines)
         layer.openTensions = tension.isEmpty ? [] : [tension]
-        let trimmedSupplemental = supplementalText.trimmingCharacters(in: .whitespacesAndNewlines)
-        layer.supplementalContext = trimmedSupplemental.isEmpty ? nil : String(trimmedSupplemental.prefix(KnowingLayer.supplementalContextLimit))
+        let trimmed = supplementalText.trimmingCharacters(in: .whitespacesAndNewlines)
+        layer.supplementalContext = trimmed.isEmpty ? nil : String(trimmed.prefix(KnowingLayer.supplementalContextLimit))
         sessionStore.updateProfile(layer)
     }
 
@@ -191,8 +326,7 @@ struct ProfileContextView: View {
             defer { url.stopAccessingSecurityScopedResource() }
             do {
                 let content = try String(contentsOf: url, encoding: .utf8)
-                let trimmed = content.trimmingCharacters(in: .whitespacesAndNewlines)
-                supplementalText = String(trimmed.prefix(KnowingLayer.supplementalContextLimit))
+                supplementalText = String(content.trimmingCharacters(in: .whitespacesAndNewlines).prefix(KnowingLayer.supplementalContextLimit))
             } catch {
                 fileError = "Could not read file: \(error.localizedDescription)"
             }
