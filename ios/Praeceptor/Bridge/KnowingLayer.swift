@@ -94,50 +94,9 @@ final class KnowingLayerBridge: ObservableObject {
         return combined.isEmpty ? nil : combined
     }
 
-    // MARK: — Copy Context for Claude Code
+    // MARK: — Copy Context Prompt for Claude Code
 
-    func copyContextPrompt() -> String {
-        guard let layer = knowingLayer else {
-            return "No context available. Complete intake first."
-        }
-
-        var lines: [String] = []
-        let name = layer.person.name.isEmpty ? "Operator" : layer.person.name
-        lines.append("Operator: \(name)")
-        if !layer.person.primaryMission.isEmpty {
-            lines.append("Building: \(layer.person.primaryMission)")
-        }
-        if !layer.person.sovereigntyStage.isEmpty {
-            lines.append("Stage: \(layer.person.sovereigntyStage)")
-        }
-        if !layer.person.originalThesis.isEmpty {
-            lines.append("Original thesis: \(layer.person.originalThesis)")
-        }
-
-        lines.append("")
-
-        let focus = layer.currentState.activeProject.isEmpty
-            ? layer.currentState.whatTheyAreDoing
-            : layer.currentState.activeProject
-        if !focus.isEmpty {
-            lines.append("Current focus: \(focus)")
-        }
-        if !layer.currentState.whatTheySaidTheyWouldDo.isEmpty {
-            lines.append("Last commitment: \(layer.currentState.whatTheySaidTheyWouldDo)")
-        }
-        if !layer.currentState.whatTheyAreDoing.isEmpty && layer.currentState.whatTheyAreDoing != focus {
-            lines.append("Actually doing: \(layer.currentState.whatTheyAreDoing)")
-        }
-        if let tension = layer.openTensions.first, !tension.isEmpty {
-            lines.append("Recurring tension: \(tension)")
-        }
-
-        if let supplemental = layer.supplementalContext, !supplemental.isEmpty {
-            lines.append("")
-            lines.append("Additional context:")
-            lines.append(supplemental)
-        }
-
-        return lines.joined(separator: "\n")
-    }
+    static let claudeCodeContextPrompt = """
+        I'm about to have a session with an ops mentor. Generate a plain-text context brief I can paste in — 200 words max. Cover: what I'm actively building right now, what I last committed to doing (check recent git commits, tasks, or notes), what I'm actually spending time on, and any friction or recurring blocker you can see. Pull from the codebase, git history, and any working context you have. First person. No headers. Just the brief.
+        """
 }

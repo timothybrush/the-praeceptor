@@ -298,8 +298,7 @@ struct ProfileContextView: View {
                 .textCase(.uppercase)
 
             Button {
-                let prompt = sessionStore.bridge.copyContextPrompt()
-                UIPasteboard.general.string = prompt
+                UIPasteboard.general.string = KnowingLayerBridge.claudeCodeContextPrompt
                 copied = true
                 Task {
                     try? await Task.sleep(for: .seconds(2))
@@ -309,9 +308,9 @@ struct ProfileContextView: View {
                 HStack(spacing: 12) {
                     Image(systemName: copied ? "checkmark" : "doc.on.doc")
                         .font(.system(size: 15, weight: .medium))
-                        .foregroundColor(copied ? theme.accent : theme.accent)
+                        .foregroundColor(theme.accent)
                         .frame(width: 20)
-                    Text(copied ? "Copied" : "Copy Context Brief")
+                    Text(copied ? "Copied" : "Copy Prompt")
                         .font(TimeOfDayTheme.body(15))
                         .foregroundColor(theme.text)
                     Spacer()
@@ -324,7 +323,7 @@ struct ProfileContextView: View {
             }
             .animation(.easeInOut(duration: 0.2), value: copied)
 
-            Text("Paste into Claude Code to give your ops mentor the right amount of context — who you are, what you're building, where you actually stand.")
+            Text("Paste into Claude Code on your machine. It will generate a context brief from your actual work — git history, tasks, codebase. Paste the result into Supplemental Context above.")
                 .font(TimeOfDayTheme.body(13))
                 .foregroundColor(theme.textTertiary)
                 .lineSpacing(3)
