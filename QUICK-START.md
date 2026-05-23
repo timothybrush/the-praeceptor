@@ -2,10 +2,11 @@
 
 ## What You Need
 
-- Xcode 16+ (tested with Xcode 26.5 / Swift 6.3.2)
-- iOS 18+ simulator (iPhone 17 Pro recommended)
-- Anthropic API key (Claude)
-- OpenAI API key (Whisper + TTS)
+- Xcode 16+ (iOS 18 SDK)
+- iOS 18+ simulator (iPhone 15 Pro or later recommended)
+- Anthropic API key — required ([console.anthropic.com](https://console.anthropic.com))
+- ElevenLabs API key — optional, for premium voice ([elevenlabs.io](https://elevenlabs.io))
+- OpenAI API key — optional, for Whisper transcription + OpenAI voice
 
 ---
 
@@ -18,16 +19,16 @@ ios/Praeceptor.xcodeproj
 Double-click to open in Xcode.
 
 **2. Select the simulator target**
-In the toolbar: `Praeceptor › iPhone 17 Pro` (or any iOS 18+ simulator)
+In the toolbar: `Praeceptor › iPhone 16 Pro` (or any iOS 18+ simulator)
 
 **3. Build and run**
 `⌘R` — first build takes ~30 seconds.
 
-**4. Enter API keys**
+**4. Enter your Claude API key**
 On first launch, the app shows a Settings screen.
 - Paste your Anthropic API key → Claude field
-- Paste your OpenAI API key → OpenAI field
-- Tap "Save Keys"
+- ElevenLabs and OpenAI keys are optional — leave blank to use Apple's on-device voice and transcription (no extra keys needed)
+- Tap **Save**
 
 Keys are stored in the iOS Keychain — you enter them once.
 
@@ -41,9 +42,9 @@ Hold the center button to speak. Release to send. The Praeceptor responds in voi
 
 ## Testing the ICM Folder (Claude Project)
 
-To test the folder directly in Claude:
+To test the character directly in Claude without the iOS app:
 1. Create a new Claude Project
-2. Upload all files from the `praeceptor/` folder root (CLAUDE.md, identity.md, rules.md, examples.md, patterns-pending.md)
+2. Upload all files from the `praeceptor/` folder root (`CLAUDE.md`, `identity.md`, `rules.md`, `examples.md`, `patterns-pending.md`)
 3. Upload the `voice/` folder files
 4. Upload the `intake/` folder files
 5. In Project Instructions, paste the contents of `CLAUDE.md`
@@ -76,4 +77,4 @@ For API errors during use: verify your keys in Settings (gear icon, top right).
 
 ---
 
-*The Praeceptor · Built for The Lyceum Week 5 · May 2026*
+*The Praeceptor · Week 5 · May 2026*

@@ -1,5 +1,5 @@
 # Judge Guide — The Praeceptor
-*Week 5 Competition · The Lyceum · May 2026*
+*Week 5 · May 2026*
 
 A complete walkthrough for evaluating every layer of the submission: ICM folder, iOS app, voice pipeline, text fallback, persistence, widget, notifications, and Dynamic Island.
 
@@ -9,8 +9,8 @@ A complete walkthrough for evaluating every layer of the submission: ICM folder,
 
 | Requirement | Version |
 |-------------|---------|
-| Xcode | 16+ (tested on Xcode 26.5 / Swift 6.3.2) |
-| iOS Simulator | iPhone 17 Pro, iOS 18+ |
+| Xcode | 16+ (iOS 18 SDK required) |
+| iOS Simulator | iPhone 15 Pro or later, iOS 18+ |
 | Anthropic API key | **Required** — powers Claude responses |
 | OpenAI API key | Optional — unlocks Whisper transcription + OpenAI TTS (onyx voice) |
 | ElevenLabs API key | Optional — reserved for premium voice tier |
@@ -28,7 +28,7 @@ ios/Praeceptor.xcodeproj
 ```
 
 1. Double-click to open in Xcode
-2. Select `Praeceptor › iPhone 17 Pro` in the toolbar
+2. Select `Praeceptor › iPhone 16 Pro` in the toolbar
 3. `⌘R` — first build ~30 seconds
 
 ---
@@ -280,5 +280,5 @@ xcodebuild test -project Praeceptor.xcodeproj \
 
 ---
 
-*The Praeceptor · Built for The Lyceum Week 5 · May 2026*
+*The Praeceptor · Week 5 · May 2026*
 *Swift 6 · SwiftUI · iOS 18+ · Claude Sonnet 4.6 · Apple on-device voice (default) · OpenAI Whisper + TTS (optional)*
