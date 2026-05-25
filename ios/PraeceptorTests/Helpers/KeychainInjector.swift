@@ -14,8 +14,7 @@ final class KeychainInjectorTests: XCTestCase {
         guard let data = try? Data(contentsOf: url),
               let dict = try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: String]
         else {
-            XCTFail("Run: write keys plist to /tmp/praeceptor_keys.plist first")
-            return
+            throw XCTSkip("Requires /tmp/praeceptor_keys.plist — run setup script before screenshot capture")
         }
         let claudeKey  = dict["claude"]     ?? ""
         let openAIKey  = dict["openai"]     ?? ""

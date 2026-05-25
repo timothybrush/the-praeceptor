@@ -15,7 +15,7 @@ struct AppleSpeechService {
         }
 
         let request = SFSpeechURLRecognitionRequest(url: audioURL)
-        request.requiresOnDeviceRecognition = false
+        request.requiresOnDeviceRecognition = recognizer.supportsOnDeviceRecognition
 
         return try await withCheckedThrowingContinuation { continuation in
             let holder = ContinuationHolder(continuation)

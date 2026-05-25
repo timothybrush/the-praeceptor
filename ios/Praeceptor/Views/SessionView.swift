@@ -48,6 +48,7 @@ struct SessionView: View {
         }
         .sheet(isPresented: $showingSettings) {
             SettingsView(apiKeyManager: apiKeyManager)
+                .environmentObject(viewModel)
         }
         .alert("Error", isPresented: errorBinding) {
             Button("OK") { viewModel.dismissError() }

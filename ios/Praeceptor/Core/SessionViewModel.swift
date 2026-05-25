@@ -25,6 +25,7 @@ final class SessionViewModel: ObservableObject {
     private var apiKeyManager: APIKeyManager?
 
     private var interruptionObserver: Task<Void, Never>?
+    private var pipelineTask: Task<Void, Never>?
 
     func configure(apiKeyManager: APIKeyManager) {
         self.apiKeyManager = apiKeyManager
@@ -126,7 +127,7 @@ final class SessionViewModel: ObservableObject {
     func stopRecording(sessionStore: SessionStore, knowingLayer: KnowingLayer?) {
         guard phase == .recording else { return }
         guard let audioURL = recorder.stop() else { phase = .idle; return }
-        Task {
+        pipelineTask = Task {
             await runPipeline(audioURL: audioURL, sessionStore: sessionStore, knowingLayer: knowingLayer)
         }
     }
@@ -140,7 +141,7 @@ final class SessionViewModel: ObservableObject {
             return
         }
         liveActivity.startActivity(sessionLabel: TimeOfDay.current.label)
-        Task {
+        pipelineTask = Task {
             await runFromText(trimmed, sessionStore: sessionStore, knowingLayer: knowingLayer)
         }
     }
@@ -154,6 +155,7 @@ final class SessionViewModel: ObservableObject {
         sessionStore: SessionStore,
         knowingLayer: KnowingLayer?
     ) async {
+        defer { try? FileManager.default.removeItem(at: audioURL) }
         phase = .transcribing
         liveActivity.updateActivity(phase: .transcribing)
 
@@ -327,10 +329,30 @@ final class SessionViewModel: ObservableObject {
     }
 
     func stopPlayback() {
+        pipelineTask?.cancel()
+        pipelineTask = nil
         player.stop()
         appleTTSService?.stop()
         liveActivity.endActivity()
         phase = .idle
+    }
+
+    func teardown() {
+        pipelineTask?.cancel()
+        pipelineTask = nil
+        interruptionObserver?.cancel()
+        interruptionObserver = nil
+        _ = recorder.stop()
+        player.stop()
+        appleTTSService?.stop()
+        liveActivity.endActivity()
+        phase = .idle
+        claudeService = nil
+        whisperService = nil
+        ttsService = nil
+        elevenLabsService = nil
+        knowingLayerUpdater = nil
+        apiKeyManager = nil
     }
 
     func dismissError() {

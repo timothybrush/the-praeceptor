@@ -29,16 +29,14 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 	<key>NSDocumentsFolderUsageDescription</key>
-	<string>Used to read context from iCloud.</string>
+	<string>Used to read context files.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>The Praeceptor listens to your voice so you can speak directly into the session.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>The Praeceptor uses speech recognition to transcribe your voice.</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>audio</string>
-	</array>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
 	<key>NSSupportsLiveActivitiesFrequentUpdates</key>
@@ -48,6 +46,12 @@
 		<key>UIApplicationSupportsMultipleScenes</key>
 		<false/>
 	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>

@@ -3,6 +3,7 @@ import SwiftUI
 struct DataPrivacyView: View {
     @EnvironmentObject var sessionStore: SessionStore
     @EnvironmentObject var apiKeyManager: APIKeyManager
+    @EnvironmentObject var sessionViewModel: SessionViewModel
     @Environment(\.dismiss) private var dismiss
 
     @State private var showClearHistoryAlert = false
@@ -185,6 +186,7 @@ struct DataPrivacyView: View {
     }
 
     private func deleteAll() {
+        sessionViewModel.teardown()
         apiKeyManager.claudeKey     = nil
         apiKeyManager.openAIKey     = nil
         apiKeyManager.elevenLabsKey = nil
