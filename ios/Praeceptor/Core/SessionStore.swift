@@ -25,16 +25,28 @@ final class SessionStore: ObservableObject {
     }
 
     private func loadMessages() {
-        guard let url = messagesURL,
-              let data = try? Data(contentsOf: url),
-              let saved = try? JSONDecoder().decode([ChatMessage].self, from: data) else { return }
-        messages = saved
+        guard let url = messagesURL else { return }
+        do {
+            let data = try Data(contentsOf: url)
+            messages = try JSONDecoder().decode([ChatMessage].self, from: data)
+        } catch let error as CocoaError where error.code == .fileReadNoSuchFile {
+            // Normal first launch
+        } catch {
+            print("[SessionStore] load failed: \(error)")
+        }
     }
 
     private func saveMessages() {
-        guard let url = messagesURL,
-              let data = try? JSONEncoder().encode(messages) else { return }
-        try? data.write(to: url, options: [.atomic, .completeFileProtection])
+        guard let url = messagesURL else {
+            print("[SessionStore] save skipped — no storage URL")
+            return
+        }
+        do {
+            let data = try JSONEncoder().encode(messages)
+            try data.write(to: url, options: [.atomic, .completeFileProtection])
+        } catch {
+            print("[SessionStore] save failed: \(error)")
+        }
     }
 
     func appendMessage(_ message: ChatMessage) {

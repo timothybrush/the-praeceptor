@@ -89,24 +89,21 @@ final class KnowingLayerUpdater {
 
         let systemPrompt = "You are writing session notes for a formed mentor. Record what he observed — not a neutral summary. What was the real tension? What did he leave with them? What pattern did he see? Return only valid JSON with no explanation or markdown."
 
-        let body: [String: Any] = [
-            "model": model,
-            "max_tokens": 2000,
-            "system": systemPrompt,
-            "messages": [["role": "user", "content": userMessage]]
-        ]
-
-        guard let httpBody = try? JSONSerialization.data(withJSONObject: body) else { return nil }
+        let body = MessagesRequest(
+            model: model,
+            maxTokens: 2000,
+            system: systemPrompt,
+            messages: [.init(role: "user", content: userMessage)]
+        )
+        guard let httpBody = try? JSONEncoder().encode(body) else { return nil }
         request.httpBody = httpBody
 
         guard let (data, response) = try? await session.data(for: request),
               let http = response as? HTTPURLResponse,
               http.statusCode == 200 else { return nil }
 
-        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let content = json["content"] as? [[String: Any]],
-              let first = content.first,
-              let text = first["text"] as? String else { return nil }
+        guard let decoded = try? JSONDecoder().decode(MessagesResponse.self, from: data),
+              let text = decoded.content.first(where: { $0.type == "text" })?.text else { return nil }
 
         // Extract JSON object — handles accidental markdown fences or surrounding prose
         guard let startIdx = text.firstIndex(of: "{"),
@@ -124,5 +121,30 @@ final class KnowingLayerUpdater {
               let layer = try? JSONDecoder().decode(KnowingLayer.self, from: patched) else { return nil }
 
         return layer
+    }
+}
+
+private struct MessagesRequest: Encodable {
+    let model: String
+    let maxTokens: Int
+    let system: String
+    let messages: [Message]
+
+    enum CodingKeys: String, CodingKey {
+        case model, system, messages
+        case maxTokens = "max_tokens"
+    }
+
+    struct Message: Encodable {
+        let role: String
+        let content: String
+    }
+}
+
+private struct MessagesResponse: Decodable {
+    let content: [ContentBlock]
+    struct ContentBlock: Decodable {
+        let type: String
+        let text: String?
     }
 }

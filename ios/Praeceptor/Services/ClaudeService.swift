@@ -26,15 +26,14 @@ struct ClaudeService: Sendable {
                     request.setValue("2023-06-01", forHTTPHeaderField: "anthropic-version")
                     request.setValue("interleaved-thinking-2025-05-14", forHTTPHeaderField: "anthropic-beta")
 
-                    let body: [String: Any] = [
-                        "model": model,
-                        "max_tokens": maxTokens,
-                        "stream": true,
-                        "system": systemPrompt,
-                        "messages": messages,
-                        "thinking": ["type": "enabled", "budget_tokens": 5000]
-                    ]
-                    request.httpBody = try JSONSerialization.data(withJSONObject: body)
+                    let body = MessageRequest(
+                        model: model,
+                        maxTokens: maxTokens,
+                        system: systemPrompt,
+                        messages: messages.map { MessageRequest.Message(role: $0["role"] ?? "", content: $0["content"] ?? "") },
+                        thinking: .init(type: "enabled", budgetTokens: 5000)
+                    )
+                    request.httpBody = try JSONEncoder().encode(body)
 
                     let (asyncBytes, response) = try await session.bytes(for: request)
 
@@ -79,6 +78,34 @@ struct ClaudeService: Sendable {
                 case 500, 503: return "Claude service is temporarily unavailable."
                 default: return "Claude error (\(code)). Please try again."
                 }
+            }
+        }
+    }
+
+    private struct MessageRequest: Encodable {
+        let model: String
+        let maxTokens: Int
+        let stream: Bool = true
+        let system: String
+        let messages: [Message]
+        let thinking: ThinkingConfig
+
+        enum CodingKeys: String, CodingKey {
+            case model, stream, system, messages, thinking
+            case maxTokens = "max_tokens"
+        }
+
+        struct Message: Encodable {
+            let role: String
+            let content: String
+        }
+
+        struct ThinkingConfig: Encodable {
+            let type: String
+            let budgetTokens: Int
+            enum CodingKeys: String, CodingKey {
+                case type
+                case budgetTokens = "budget_tokens"
             }
         }
     }

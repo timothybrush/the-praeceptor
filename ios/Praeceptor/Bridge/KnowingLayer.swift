@@ -21,25 +21,42 @@ final class KnowingLayerBridge: ObservableObject {
     }
 
     func load() {
-        guard let url = fileURL,
-              let data = try? Data(contentsOf: url),
-              let layer = try? JSONDecoder().decode(KnowingLayer.self, from: data) else {
+        guard let url = fileURL else { return }
+        do {
+            let data = try Data(contentsOf: url)
+            knowingLayer = try JSONDecoder().decode(KnowingLayer.self, from: data)
+        } catch let error as CocoaError where error.code == .fileReadNoSuchFile {
             knowingLayer = nil
-            return
+        } catch {
+            print("[KnowingLayerBridge] load failed: \(error)")
+            knowingLayer = nil
         }
-        knowingLayer = layer
     }
 
     func save(_ layer: KnowingLayer) {
         knowingLayer = layer
-        guard let url = fileURL,
-              let data = try? JSONEncoder().encode(layer) else { return }
-        try? data.write(to: url, options: [.atomic, .completeFileProtection])
+        guard let url = fileURL else {
+            print("[KnowingLayerBridge] save skipped — no storage URL")
+            return
+        }
+        do {
+            let data = try JSONEncoder().encode(layer)
+            try data.write(to: url, options: [.atomic, .completeFileProtection])
+        } catch {
+            print("[KnowingLayerBridge] save failed: \(error)")
+        }
     }
 
     func reset() {
         knowingLayer = nil
-        if let url = fileURL { try? FileManager.default.removeItem(at: url) }
+        guard let url = fileURL else { return }
+        do {
+            try FileManager.default.removeItem(at: url)
+        } catch let error as CocoaError where error.code == .fileNoSuchFile {
+            // Already gone
+        } catch {
+            print("[KnowingLayerBridge] reset failed: \(error)")
+        }
     }
 
     var hasKnowingLayer: Bool { knowingLayer != nil }
