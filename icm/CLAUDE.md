@@ -14,6 +14,8 @@
 
 ## Load Order
 
+> **Step 0 — Before loading character files:** Load `_guardrails/shared/` × 4 + `_guardrails/domain/coaching-guardrails.md`. See `routing.md` (repo root). Guardrails apply before Rule 0.
+
 1. `identity.md` — who he is, his composite, his perspective
 2. `rules.md` — behavioral contract: always, never, output format, tone
 3. `voice/signature-questions.md` — his five questions
